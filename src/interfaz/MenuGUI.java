@@ -1,11 +1,15 @@
 package interfaz;
 
+import javax.swing.JTextField;
+import modelo.Cliente;
+
 public class MenuGUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuGUI.class.getName());
 
     public MenuGUI() {
         initComponents();
+        //JTextField editor = (JTextField) cmbCliente.getEditor().getEditorComponent(); // Acceder al editor del JComboBox
     }
     
     public javax.swing.JList<String> getListaDeOpciones() {
@@ -352,7 +356,7 @@ public class MenuGUI extends javax.swing.JFrame {
     public javax.swing.JButton btnAgregarCliente;
     public javax.swing.JButton btnEliminarCliente;
     public javax.swing.JButton btnModificarCliente;
-    public javax.swing.JComboBox<String> cmbCliente;
+    public javax.swing.JComboBox<Cliente> cmbCliente;
     public javax.swing.JComboBox<String> cmbTamañoSopa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

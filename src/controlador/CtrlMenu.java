@@ -49,7 +49,7 @@ public class CtrlMenu {
                 switch(seleccion)
                 {
                     case "Nuevo Pedido":
-//                        ctrlNuevoPedido.LlenarComboBoxCliente();
+                        
                         cardLayout.show(menu.getPanelImagenes(), "Nuevo Pedido CRUD");
                         
                         break;
