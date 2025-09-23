@@ -4,39 +4,32 @@ import dao.ClienteDAO;
 import interfaz.MenuGUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
 import modelo.Cliente;
 
 public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentListener {
 
     private MenuGUI menu;
-    //private DefaultComboBoxModel<Cliente> model; //como se asigna dinamicamente, no tiene sentido declararla aqui
     private ClienteDAO cliDAO = new ClienteDAO();
     private JTextField editor;
     List<Cliente> listaDeClientes;
+    private DefaultTableModel model = new DefaultTableModel();
 
     public CtrlNuevoPedido(MenuGUI menu) {
         this.menu = menu;
         this.listaDeClientes = cliDAO.CargarClientes();
-        DefaultComboBoxModel<Cliente> modelo = new DefaultComboBoxModel<>();
-        for (Cliente c : listaDeClientes) {
-            modelo.addElement(c);
-        }
-        menu.cmbCliente.setModel(modelo);
-        editor = (JTextField) menu.cmbCliente.getEditor().getEditorComponent();
-        
-        editor.getDocument().addDocumentListener(this);
-        editor.addKeyListener(this);
-        menu.cmbCliente.addActionListener(this);
-        
+        //model = new DefaultTableModel(new Object[]{"ID", "Cliente", "Teléfono"}, 0);
+        //this.menu.tblCliente.setModel(model);
+        CrearTabla();
+        this.menu.tblCliente.setVisible(false);
+        this.menu.txtCliente.getDocument().addDocumentListener(this);
+        this.menu.txtCliente.addKeyListener(this);
     }
 
     @Override
@@ -51,16 +44,28 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            // Seleccionar el primer elemento y ocultar el popup
-            if (menu.cmbCliente.getItemCount() > 0) {
-                menu.cmbCliente.setSelectedItem(menu.cmbCliente.getItemAt(0));
-                menu.cmbCliente.setPopupVisible(false);
-                // Puedes agregar aquí la lógica para usar el cliente seleccionado
-                Cliente clienteSeleccionado = (Cliente) menu.cmbCliente.getSelectedItem();
-                System.out.println("Cliente seleccionado: " + clienteSeleccionado.getNombre() + ", ID: " + clienteSeleccionado.getId());
+        int row = menu.tblCliente.getSelectedRow();
+        if (row != -1) {
+            
+            if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            {
+            /*
+            Esta es otra forma de hacer, sin usar un cast (int) en la declaracion, sino que transformamos a int el objeto seleccionado
+            Object valor = menu.tblCliente.getValueAt(row, 0);
+            int id = Integer.parseInt(valor.toString()); // obs: todo objeto tiene toString, por lo que de esta manera transformamos las cosas sin problemas
+            */
+            
+            int id = (int) menu.tblCliente.getValueAt(row, 0); // con el parentesis (int) le damos la orden de que trate ese dato como int, si no lo es no funciona, osea asume
+            String nombre = (String) menu.tblCliente.getValueAt(row, 1); // lo mismo aca, asumimos que es String con el cast para tratar ese dato como tal
+            String telefono = (String) menu.tblCliente.getValueAt(row, 2);
+
+            System.out.println("Cliente seleccionado: " + nombre + ", ID: " + id);
+            menu.txtCliente.setText(nombre);
+            menu.tblCliente.setVisible(false);
             }
         }
+            
+            
     }
 
     @Override
@@ -80,30 +85,41 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
 
     @Override
     public void changedUpdate(DocumentEvent e) {
-        //no usamos
+        
     }
         
     private void filtrar() {
-        String texto = editor.getText().toLowerCase();
-        DefaultComboBoxModel<Cliente> modelo = (DefaultComboBoxModel<Cliente>) menu.cmbCliente.getModel();
-        modelo.removeAllElements(); // limpiamos
+        DefaultTableModel modelo = (DefaultTableModel) menu.tblCliente.getModel();
+        modelo.setRowCount(0); // limpiar antes de volver a cargar
 
+        String texto = menu.txtCliente.getText().trim();
         if (texto.isEmpty()) {
-            for (Cliente c : listaDeClientes) {
-                modelo.addElement(c);
-            }
+            menu.tblCliente.setVisible(false);
         } else {
             for (Cliente c : listaDeClientes) {
-                if (c.getNombre().toLowerCase().contains(texto)) {
-                    modelo.addElement(c);
-                }
+               List<Cliente> resultados = cliDAO.buscarClientes(texto);
+                Object[] fila = new Object[3];
+                fila[0] = c.getId();
+                fila[1] = c.getNombre();
+                fila[2] = c.getTelefono();
+                model.addRow(fila);
+                //modelo.addRow(new Object[]{c.getId(), c.getNombre(), c.getTelefono()});
             }
-        }
-
-        // Mantener el texto escrito en el editor
-        editor.setText(texto);
-        menu.cmbCliente.setPopupVisible(true);
+        menu.tblCliente.setVisible(modelo.getRowCount() > 0);
     }
-
+}
+    public void CrearTabla(){
+        model = new DefaultTableModel();
+        model.addColumn("id");
+        model.addColumn("Cliente");
+        model.addColumn("Telefono");
+        
+        menu.tblCliente.setModel(model);
+        //lo siguiente marca un tamaño minimo y maximo para la primera columna (la columna 0), al ponerle valor 0 a ambas permanece oculta
+        menu.tblCliente.getColumnModel().getColumn(0).setMinWidth(0);
+        menu.tblCliente.getColumnModel().getColumn(0).setMaxWidth(0);
+        menu.tblCliente.getColumnModel().getColumn(2).setMinWidth(0);
+        menu.tblCliente.getColumnModel().getColumn(2).setMaxWidth(0);
+    }
     
 }

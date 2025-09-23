@@ -47,11 +47,14 @@ public class MenuGUI extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        cmbCliente = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         spnCantidad = new javax.swing.JSpinner();
         cmbTamañoSopa = new javax.swing.JComboBox<>();
+        txtCliente = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblCliente = new javax.swing.JTable();
         ClientesCRUD = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblClientes = new javax.swing.JTable();
@@ -117,86 +120,57 @@ public class MenuGUI extends javax.swing.JFrame {
 
         PanelImagenes.add(pnlGanancias, "Ganancias");
 
-        jLabel1.setFont(new java.awt.Font("Viner Hand ITC", 0, 24)); // NOI18N
+        NuevoPedidoCRUD.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Txt_IV50", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NUEVO PEDIDO");
+        NuevoPedidoCRUD.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 651, 100));
 
         jLabel2.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         jLabel2.setText("Detalles:");
+        NuevoPedidoCRUD.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 208, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         jLabel3.setText("Cliente");
+        NuevoPedidoCRUD.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(76, 128, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         jLabel4.setText("Total");
-
-        cmbCliente.setEditable(true);
+        NuevoPedidoCRUD.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 299, -1, -1));
 
         jLabel6.setText("Cantidad:");
+        NuevoPedidoCRUD.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(282, 243, -1, -1));
 
         jLabel7.setText("Tamaño:");
+        NuevoPedidoCRUD.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 243, -1, -1));
+        NuevoPedidoCRUD.add(spnCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 238, -1, -1));
 
         cmbTamañoSopa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbTamañoSopaActionPerformed(evt);
             }
         });
+        NuevoPedidoCRUD.add(cmbTamañoSopa, new org.netbeans.lib.awtextra.AbsoluteConstraints(126, 238, 150, -1));
+        NuevoPedidoCRUD.add(txtCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 128, 150, -1));
 
-        javax.swing.GroupLayout NuevoPedidoCRUDLayout = new javax.swing.GroupLayout(NuevoPedidoCRUD);
-        NuevoPedidoCRUD.setLayout(NuevoPedidoCRUDLayout);
-        NuevoPedidoCRUDLayout.setHorizontalGroup(
-            NuevoPedidoCRUDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
-            .addGroup(NuevoPedidoCRUDLayout.createSequentialGroup()
-                .addGap(74, 74, 74)
-                .addGroup(NuevoPedidoCRUDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(NuevoPedidoCRUDLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(spnCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbTamañoSopa, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(152, 152, 152))
-                    .addGroup(NuevoPedidoCRUDLayout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(jLabel4))))
-            .addGroup(NuevoPedidoCRUDLayout.createSequentialGroup()
-                .addGap(154, 154, 154)
-                .addComponent(cmbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(NuevoPedidoCRUDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(NuevoPedidoCRUDLayout.createSequentialGroup()
-                    .addGap(76, 76, 76)
-                    .addComponent(jLabel3)
-                    .addContainerGap(568, Short.MAX_VALUE)))
-        );
-        NuevoPedidoCRUDLayout.setVerticalGroup(
-            NuevoPedidoCRUDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(NuevoPedidoCRUDLayout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(cmbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addGroup(NuevoPedidoCRUDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(NuevoPedidoCRUDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel6)
-                        .addComponent(jLabel7)
-                        .addComponent(spnCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cmbTamañoSopa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2))
-                .addGap(65, 65, 65)
-                .addComponent(jLabel4)
-                .addGap(0, 157, Short.MAX_VALUE))
-            .addGroup(NuevoPedidoCRUDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(NuevoPedidoCRUDLayout.createSequentialGroup()
-                    .addGap(128, 128, 128)
-                    .addComponent(jLabel3)
-                    .addContainerGap(300, Short.MAX_VALUE)))
-        );
+        jLabel8.setText("0 Gs");
+        NuevoPedidoCRUD.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(121, 305, 155, -1));
+
+        tblCliente.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane3.setViewportView(tblCliente);
+
+        NuevoPedidoCRUD.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 150, 30));
 
         PanelImagenes.add(NuevoPedidoCRUD, "Nuevo Pedido CRUD");
 
@@ -356,7 +330,6 @@ public class MenuGUI extends javax.swing.JFrame {
     public javax.swing.JButton btnAgregarCliente;
     public javax.swing.JButton btnEliminarCliente;
     public javax.swing.JButton btnModificarCliente;
-    public javax.swing.JComboBox<Cliente> cmbCliente;
     public javax.swing.JComboBox<String> cmbTamañoSopa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -365,8 +338,10 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblGanancias;
     private javax.swing.JLabel lblHistorial;
     private javax.swing.JLabel lblNombreCliente;
@@ -381,7 +356,9 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JPanel pnlPedidos;
     private javax.swing.JPanel pnllNuevoPedido;
     public javax.swing.JSpinner spnCantidad;
+    public javax.swing.JTable tblCliente;
     public javax.swing.JTable tblClientes;
+    public javax.swing.JTextField txtCliente;
     public javax.swing.JTextField txtNombreCliente;
     public javax.swing.JTextField txtTelefonoCliente;
     // End of variables declaration//GEN-END:variables

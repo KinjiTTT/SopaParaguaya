@@ -66,6 +66,30 @@ public class ClienteDAO {
         return listaClientes;
         
     }
+    public ArrayList<Cliente> buscarClientes(String filtro) {
+    ArrayList<Cliente> lista = new ArrayList<>();
+    String sql = "SELECT id_cliente, nombre, telefono FROM clientes WHERE nombre ILIKE ? ORDER BY nombre";
+    try {
+        sentencia = conec.prepareStatement(sql);
+        // el comodín % va en el parámetro, no en la query
+        String filtroLike = "%" + filtro + "%";
+        sentencia.setString(1, filtroLike);
+
+        resultSet = sentencia.executeQuery();
+        while (resultSet.next()) {
+            Cliente cliente = new Cliente();
+            cliente.setId(resultSet.getInt("id_cliente"));
+            cliente.setNombre(resultSet.getString("nombre"));
+            cliente.setTelefono(resultSet.getString("telefono"));
+            lista.add(cliente);
+        }
+    } catch (SQLException ex) {
+        System.getLogger(ClienteDAO.class.getName())
+              .log(System.Logger.Level.ERROR, (String) null, ex);
+    }
+
+    return lista;
+}
     public void ModificarCliente(Cliente cliente)
     {
         String sql = "UPDATE clientes SET nombre = ?, telefono = ? WHERE id_cliente = ?";
