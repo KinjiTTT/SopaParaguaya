@@ -91,13 +91,14 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
     private void filtrar() {
         DefaultTableModel modelo = (DefaultTableModel) menu.tblCliente.getModel();
         modelo.setRowCount(0); // limpiar antes de volver a cargar
-
         String texto = menu.txtCliente.getText().trim();
+        List<Cliente> resultados = cliDAO.buscarClientes(texto);
+        
         if (texto.isEmpty()) {
             menu.tblCliente.setVisible(false);
         } else {
-            for (Cliente c : listaDeClientes) {
-               List<Cliente> resultados = cliDAO.buscarClientes(texto);
+            for (Cliente c : resultados) {
+               
                 Object[] fila = new Object[3];
                 fila[0] = c.getId();
                 fila[1] = c.getNombre();
@@ -120,6 +121,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         menu.tblCliente.getColumnModel().getColumn(0).setMaxWidth(0);
         menu.tblCliente.getColumnModel().getColumn(2).setMinWidth(0);
         menu.tblCliente.getColumnModel().getColumn(2).setMaxWidth(0);
+        menu.tblCliente.setTableHeader(null);
     }
     
 }

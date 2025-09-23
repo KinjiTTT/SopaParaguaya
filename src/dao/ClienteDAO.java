@@ -86,10 +86,10 @@ public class ClienteDAO {
     } catch (SQLException ex) {
         System.getLogger(ClienteDAO.class.getName())
               .log(System.Logger.Level.ERROR, (String) null, ex);
-    }
+        }
 
     return lista;
-}
+    }
     public void ModificarCliente(Cliente cliente)
     {
         String sql = "UPDATE clientes SET nombre = ?, telefono = ? WHERE id_cliente = ?";

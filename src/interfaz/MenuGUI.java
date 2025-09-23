@@ -170,7 +170,7 @@ public class MenuGUI extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(tblCliente);
 
-        NuevoPedidoCRUD.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 150, 30));
+        NuevoPedidoCRUD.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 80, 290, 130));
 
         PanelImagenes.add(NuevoPedidoCRUD, "Nuevo Pedido CRUD");
 

@@ -24,6 +24,7 @@ public class CtrlMenu {
         this.menu = menu;
         this.cardLayout = (CardLayout) menu.getPanelImagenes().getLayout();
         this.ctrlCliente = new CtrlCliente(menu);
+        this.ctrlNuevoPedido = new CtrlNuevoPedido(menu);
         
         menu.getListaDeOpciones().addListSelectionListener(new ListSelectionListener() { //Es parecido a cuando usas un ActionListener predeterminado
             public void valueChanged(ListSelectionEvent e) {
