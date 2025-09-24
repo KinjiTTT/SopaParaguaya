@@ -2,6 +2,7 @@ package interfaz;
 
 import javax.swing.JTextField;
 import modelo.Cliente;
+import modelo.Sopa;
 
 public class MenuGUI extends javax.swing.JFrame {
     
@@ -157,6 +158,9 @@ public class MenuGUI extends javax.swing.JFrame {
         jLabel8.setText("0 Gs");
         NuevoPedidoCRUD.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(121, 305, 155, -1));
 
+        jScrollPane3.setBorder(new javax.swing.border.MatteBorder(null));
+
+        tblCliente.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tblCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -170,7 +174,7 @@ public class MenuGUI extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(tblCliente);
 
-        NuevoPedidoCRUD.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 80, 290, 130));
+        NuevoPedidoCRUD.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 150, 150, 60));
 
         PanelImagenes.add(NuevoPedidoCRUD, "Nuevo Pedido CRUD");
 
@@ -322,7 +326,7 @@ public class MenuGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ClientesCRUD;
-    private javax.swing.JList<String> ListaDeOpciones;
+    public javax.swing.JList<String> ListaDeOpciones;
     private javax.swing.JPanel NuevoPedidoCRUD;
     private javax.swing.JPanel PanelImagenes;
     private javax.swing.JPanel PanelMenu;
@@ -330,7 +334,7 @@ public class MenuGUI extends javax.swing.JFrame {
     public javax.swing.JButton btnAgregarCliente;
     public javax.swing.JButton btnEliminarCliente;
     public javax.swing.JButton btnModificarCliente;
-    public javax.swing.JComboBox<String> cmbTamañoSopa;
+    public javax.swing.JComboBox<Sopa> cmbTamañoSopa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -341,7 +345,7 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    public javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblGanancias;
     private javax.swing.JLabel lblHistorial;
     private javax.swing.JLabel lblNombreCliente;

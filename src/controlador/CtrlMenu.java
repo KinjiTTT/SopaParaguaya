@@ -50,7 +50,7 @@ public class CtrlMenu {
                 switch(seleccion)
                 {
                     case "Nuevo Pedido":
-                        
+                        menu.txtCliente.requestFocusInWindow();
                         cardLayout.show(menu.getPanelImagenes(), "Nuevo Pedido CRUD");
                         
                         break;

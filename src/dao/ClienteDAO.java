@@ -68,7 +68,7 @@ public class ClienteDAO {
     }
     public ArrayList<Cliente> buscarClientes(String filtro) {
     ArrayList<Cliente> lista = new ArrayList<>();
-    String sql = "SELECT id_cliente, nombre, telefono FROM clientes WHERE nombre ILIKE ? ORDER BY nombre";
+    String sql = "SELECT id_cliente, nombre, telefono FROM clientes WHERE nombre ILIKE ? ORDER BY nombre LIMIT 3";
     try {
         sentencia = conec.prepareStatement(sql);
         // el comodín % va en el parámetro, no en la query
