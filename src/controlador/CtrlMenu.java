@@ -9,6 +9,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import modelo.Conexion;
+import modelo.Login;
 
 public class CtrlMenu {
     private MenuGUI menu;
@@ -16,15 +17,18 @@ public class CtrlMenu {
     private CtrlCliente ctrlCliente;
     private CtrlNuevoPedido ctrlNuevoPedido;
     private Conexion conexion = new Conexion();
+    private Login usuario;
     
     //private LoginDAO dao = new LoginDAO();
     
-    public CtrlMenu(MenuGUI menu)
+    public CtrlMenu(MenuGUI menu, Login usuario)
     {
         this.menu = menu;
         this.cardLayout = (CardLayout) menu.getPanelImagenes().getLayout();
         this.ctrlCliente = new CtrlCliente(menu);
-        this.ctrlNuevoPedido = new CtrlNuevoPedido(menu);
+        this.usuario = usuario;
+        this.ctrlNuevoPedido = new CtrlNuevoPedido(menu, usuario);
+        
         
         menu.getListaDeOpciones().addListSelectionListener(new ListSelectionListener() { //Es parecido a cuando usas un ActionListener predeterminado
             public void valueChanged(ListSelectionEvent e) {

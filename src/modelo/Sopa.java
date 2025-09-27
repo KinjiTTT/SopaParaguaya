@@ -1,10 +1,12 @@
 package modelo;
 
+import java.math.BigDecimal;
+
 
 public class Sopa {
     private int id;
     private String tamaño;
-    private String precio;
+    private BigDecimal precio;
 
     public int getId() {
         return id;
@@ -22,11 +24,11 @@ public class Sopa {
         this.tamaño = tamaño;
     }
 
-    public String getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(String precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 

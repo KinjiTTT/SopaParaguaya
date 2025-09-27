@@ -8,9 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.event.DocumentEvent;
@@ -18,30 +20,32 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import modelo.Cliente;
 import modelo.Sopa;
+import modelo.Detalle_Pedido;
+import modelo.Pedido;
+import modelo.Login;
 
 public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentListener {
 
     private MenuGUI menu;
     private ClienteDAO cliDAO = new ClienteDAO();
     private PedidosDAO pedDAO = new PedidosDAO();
-    private JTextField editor;
-    List<Cliente> listaDeClientes;
     List<Sopa> listaDeSopas;
     private DefaultComboBoxModel<Sopa> modelComboBox= new DefaultComboBoxModel<>();
-    private DefaultTableModel model = new DefaultTableModel();
+    private DefaultTableModel modelBuscador = new DefaultTableModel();
+    private DefaultTableModel modelDetalles = new DefaultTableModel();
     private Cliente clienteSeleccionado = new Cliente();
-    private Sopa tamañoSeleccionado = new Sopa();
+    private Login usuario;
 
-    public CtrlNuevoPedido(MenuGUI menu) {
+    public CtrlNuevoPedido(MenuGUI menu, Login usuario) {
         this.menu = menu;
-        this.listaDeClientes = cliDAO.CargarClientes();
-        //model = new DefaultTableModel(new Object[]{"ID", "Cliente", "Teléfono"}, 0);
-        //this.menu.tblCliente.setModel(model);
-        CrearTabla();
+        this.usuario = usuario;
+        CrearTablaBuscador();
+        CrearTablaDetalles();
         this.menu.tblCliente.setVisible(false);
         this.menu.txtCliente.getDocument().addDocumentListener(this);
         this.menu.txtCliente.addKeyListener(this);
         this.menu.txtCliente.addActionListener(this);
+        
         
         this.listaDeSopas = pedDAO.CargarSopas();
         for(Sopa s : listaDeSopas)
@@ -49,13 +53,36 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
             modelComboBox.addElement(s);
         }
         this.menu.cmbTamañoSopa.setModel(modelComboBox);
+        
+        this.menu.cmbTamañoSopa.addActionListener(this);
+        this.menu.spnCantidad.addKeyListener(this);
+        this.menu.btnAgregarDetalle.addActionListener(this);
+        this.menu.btnConfirmarPedido.addActionListener(this);
+        
+        this.menu.spnCantidad.setValue(1);
+        
+        this.menu.btnCancelarPedido.addActionListener(this);
     }
-
+    //---------------------------------------------Listeners---------------------------------------------//
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == menu.txtCliente)
+        if(e.getSource() == menu.btnAgregarDetalle)
         {
-           // menu.cmbTamañoSopa.requestFocus();
+           AgregarDetalle();
+        }
+        if(e.getSource() == menu.cmbTamañoSopa){
+            //menu.spnCantidad.requestFocus();
+        }
+        if(e.getSource() == menu.btnConfirmarPedido){
+            menu.txtCliente.setEditable(true);
+            menu.txtCliente.setText("");
+            
+        }
+        if(e.getSource() == menu.btnCancelarPedido){
+            menu.txtCliente.setEditable(true);
+            menu.txtCliente.setText("");
+            menu.spnCantidad.setValue(1);
+            CrearTablaDetalles();
         }
     }
 
@@ -78,6 +105,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
                     clienteSeleccionado.setNombre((String) menu.tblCliente.getValueAt(0, 1));
                     clienteSeleccionado.setTelefono((String) menu.tblCliente.getValueAt(0, 2));
                     menu.txtCliente.setText(clienteSeleccionado.getNombre());
+                    menu.txtCliente.setEditable(false);
                     menu.tblCliente.setVisible(false);
                     menu.cmbTamañoSopa.requestFocus();
                 }
@@ -118,7 +146,20 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
                 menu.cmbTamañoSopa.requestFocus();
             }
         }
-        
+        if (e.getSource() == menu.cmbTamañoSopa)
+        {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            {
+                menu.spnCantidad.requestFocus();
+            }
+        }
+        if (e.getSource() == menu.spnCantidad)
+        {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            {
+                menu.btnAgregarDetalle.doClick();
+            }
+        }
             
             
     }
@@ -142,7 +183,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
     public void changedUpdate(DocumentEvent e) {
         
     }
-        
+    //---------------------------------------------Metodos---------------------------------------------//
     private void filtrar() {
         DefaultTableModel modelo = (DefaultTableModel) menu.tblCliente.getModel();
         modelo.setRowCount(0); // limpiar antes de volver a cargar
@@ -158,20 +199,20 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
                 fila[0] = c.getId();
                 fila[1] = c.getNombre();
                 fila[2] = c.getTelefono();
-                model.addRow(fila);
+                modelBuscador.addRow(fila);
                 //modelo.addRow(new Object[]{c.getId(), c.getNombre(), c.getTelefono()});
             }
         menu.tblCliente.setVisible(modelo.getRowCount() > 0);
     }
 }
-    public void CrearTabla(){
-        model = new DefaultTableModel();
-        model.addColumn("id");
-        model.addColumn("Cliente");
-        model.addColumn("Telefono");
+    public void CrearTablaBuscador(){
+        modelBuscador = new DefaultTableModel();
+        modelBuscador.addColumn("id");
+        modelBuscador.addColumn("Cliente");
+        modelBuscador.addColumn("Telefono");
         
-        menu.tblCliente.setModel(model);
-        //lo siguiente marca un tamaño minimo y maximo para la primera columna (la columna 0), al ponerle valor 0 a ambas permanece oculta
+        menu.tblCliente.setModel(modelBuscador);
+        //lo siguiente marca un tamaño minimo y maximo para las columnas, en este caso lo hacemos para que no sean visibles
         menu.tblCliente.getColumnModel().getColumn(0).setMinWidth(0);
         menu.tblCliente.getColumnModel().getColumn(0).setMaxWidth(0);
         menu.tblCliente.getColumnModel().getColumn(2).setMinWidth(0);
@@ -196,4 +237,50 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
             }
         }
     }
+    public void CrearTablaDetalles(){
+        modelDetalles = new DefaultTableModel();
+        modelDetalles.addColumn("id");
+        modelDetalles.addColumn("sopa");
+        modelDetalles.addColumn("cantidad");
+        modelDetalles.addColumn("precio");
+        menu.tblDetalles.setModel(modelDetalles);
+        
+        menu.tblDetalles.getColumnModel().getColumn(0).setMinWidth(0);
+        menu.tblDetalles.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+    public void AgregarDetalle(){
+        
+        Detalle_Pedido detalle = new Detalle_Pedido();
+        Sopa sopaSeleccionada = new Sopa();
+        sopaSeleccionada = (Sopa) menu.cmbTamañoSopa.getSelectedItem();
+        int cantidad = (int) menu.spnCantidad.getValue();
+        if(cantidad > 0)
+        {
+            detalle.setId_sopa(sopaSeleccionada.getId());
+            detalle.setCantidad(cantidad);
+
+            Object[] fila = new Object[4];
+            fila[0] = detalle;
+            fila[1] = sopaSeleccionada.getTamaño();
+            fila[2] = detalle.getCantidad();
+            BigDecimal subtotal = sopaSeleccionada.getPrecio().multiply(BigDecimal.valueOf(detalle.getCantidad()));
+
+            fila[3] = subtotal;
+            modelDetalles.addRow(fila);
+            
+            //menu.lblTotalAPagar.setText();
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Cantidad no valida");
+        }
+    }
+    public void AgregarPedido(){
+        Pedido pedido = new Pedido();
+        pedido.setId_cliente(clienteSeleccionado.getId());
+        pedido.setId_usuario(usuario.getId_usuario());
+        pedido.setEstado("fldsmdfr");
+    }
+    
+    
 }

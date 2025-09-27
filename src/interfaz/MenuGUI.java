@@ -53,9 +53,14 @@ public class MenuGUI extends javax.swing.JFrame {
         spnCantidad = new javax.swing.JSpinner();
         cmbTamañoSopa = new javax.swing.JComboBox<>();
         txtCliente = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
+        lblTotalAPagar = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblCliente = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblDetalles = new javax.swing.JTable();
+        btnAgregarDetalle = new javax.swing.JButton();
+        btnConfirmarPedido = new javax.swing.JButton();
+        btnCancelarPedido = new javax.swing.JButton();
         ClientesCRUD = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblClientes = new javax.swing.JTable();
@@ -138,14 +143,14 @@ public class MenuGUI extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         jLabel4.setText("Total");
-        NuevoPedidoCRUD.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 299, -1, -1));
+        NuevoPedidoCRUD.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, -1, -1));
 
         jLabel6.setText("Cantidad:");
         NuevoPedidoCRUD.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(282, 243, -1, -1));
 
         jLabel7.setText("Tamaño:");
         NuevoPedidoCRUD.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 243, -1, -1));
-        NuevoPedidoCRUD.add(spnCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 238, -1, -1));
+        NuevoPedidoCRUD.add(spnCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 240, 60, -1));
 
         cmbTamañoSopa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -155,8 +160,9 @@ public class MenuGUI extends javax.swing.JFrame {
         NuevoPedidoCRUD.add(cmbTamañoSopa, new org.netbeans.lib.awtextra.AbsoluteConstraints(126, 238, 150, -1));
         NuevoPedidoCRUD.add(txtCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 128, 150, -1));
 
-        jLabel8.setText("0 Gs");
-        NuevoPedidoCRUD.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(121, 305, 155, -1));
+        lblTotalAPagar.setFont(new java.awt.Font("Wide Latin", 0, 18)); // NOI18N
+        lblTotalAPagar.setText("0 Gs");
+        NuevoPedidoCRUD.add(lblTotalAPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, 155, 20));
 
         jScrollPane3.setBorder(new javax.swing.border.MatteBorder(null));
 
@@ -175,6 +181,30 @@ public class MenuGUI extends javax.swing.JFrame {
         jScrollPane3.setViewportView(tblCliente);
 
         NuevoPedidoCRUD.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 150, 150, 60));
+
+        tblDetalles.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane4.setViewportView(tblDetalles);
+
+        NuevoPedidoCRUD.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 100, 250, 170));
+
+        btnAgregarDetalle.setText("Agregar");
+        NuevoPedidoCRUD.add(btnAgregarDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 270, -1, -1));
+
+        btnConfirmarPedido.setText("Confirmar Pedido");
+        NuevoPedidoCRUD.add(btnConfirmarPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 280, -1, -1));
+
+        btnCancelarPedido.setText("Cancelar");
+        NuevoPedidoCRUD.add(btnCancelarPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 280, -1, -1));
 
         PanelImagenes.add(NuevoPedidoCRUD, "Nuevo Pedido CRUD");
 
@@ -332,6 +362,9 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JPanel PanelMenu;
     private javax.swing.JPanel PedidosCRUD;
     public javax.swing.JButton btnAgregarCliente;
+    public javax.swing.JButton btnAgregarDetalle;
+    public javax.swing.JButton btnCancelarPedido;
+    public javax.swing.JButton btnConfirmarPedido;
     public javax.swing.JButton btnEliminarCliente;
     public javax.swing.JButton btnModificarCliente;
     public javax.swing.JComboBox<Sopa> cmbTamañoSopa;
@@ -342,10 +375,10 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     public javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lblGanancias;
     private javax.swing.JLabel lblHistorial;
     private javax.swing.JLabel lblNombreCliente;
@@ -353,6 +386,7 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JLabel lblPagos;
     private javax.swing.JLabel lblPedidos;
     private javax.swing.JLabel lblTelefonoCliente;
+    public javax.swing.JLabel lblTotalAPagar;
     private javax.swing.JPanel pnlClientes;
     private javax.swing.JPanel pnlGanancias;
     private javax.swing.JPanel pnlHistorial;
@@ -362,6 +396,7 @@ public class MenuGUI extends javax.swing.JFrame {
     public javax.swing.JSpinner spnCantidad;
     public javax.swing.JTable tblCliente;
     public javax.swing.JTable tblClientes;
+    public javax.swing.JTable tblDetalles;
     public javax.swing.JTextField txtCliente;
     public javax.swing.JTextField txtNombreCliente;
     public javax.swing.JTextField txtTelefonoCliente;

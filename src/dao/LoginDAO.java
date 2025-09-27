@@ -19,9 +19,10 @@ public class LoginDAO {
             conexion = new Conexion(); // cada vez que crees un LoginDAO, también se crea su Conexion
         }
         
-        public Boolean iniciarSesion(Login login)
+        public Login iniciarSesion(String usuario, String contraseña)
         {
             connection = conexion.conectar();
+            
             if(connection == null)
             {
                 System.out.println("No se pudo conectar a la base de datos");
@@ -31,21 +32,26 @@ public class LoginDAO {
             
             try {
                 preStatement = connection.prepareStatement(sql);
-                preStatement.setString(1,login.getUsuario());
-                preStatement.setString(2, login.getPassword());
+                preStatement.setString(1,usuario);
+                preStatement.setString(2, contraseña);
                 
                 resultSet = preStatement.executeQuery();
                 
                 if(resultSet.next())
                 {
-                    return true;
+                    Login usuarioLogueado = new Login();
+                    usuarioLogueado.setId_usuario(resultSet.getInt("id_usuario"));
+                    usuarioLogueado.setNombre(resultSet.getString("nombre"));
+                    usuarioLogueado.setUsuario(resultSet.getString("usuario"));
+                    usuarioLogueado.setPassword(resultSet.getString("contraseña"));
+                    return usuarioLogueado;
                 }
                 
             } catch (SQLException ex) {
                 System.getLogger(LoginDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
            
-            return false;
+            return null;
         }
         
 }

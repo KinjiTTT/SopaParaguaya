@@ -44,15 +44,18 @@ public class CtrlLogin implements ActionListener {
             {
                 JOptionPane.showMessageDialog(null,"Llene todos los campos");
             }
-            Login usuario = new Login();
-            usuario.setUsuario(login.txtUsuario.getText());
-            usuario.setPassword(login.txtContraseña.getText());
-            if(dao.iniciarSesion(usuario))
+            
+            String usuario = login.txtUsuario.getText();
+            String contraseña = login.txtContraseña.getText();
+            Login usuarioLogueado = dao.iniciarSesion(usuario, contraseña);
+            if(usuarioLogueado != null)
             {
                 JOptionPane.showMessageDialog(null, "Bien hecho caballero");
                 MenuGUI mainGUI = new MenuGUI();
-                CtrlMenu ctrlMenu = new CtrlMenu(mainGUI); //Mandamos como argumento la vista al controlador
+                CtrlMenu ctrlMenu = new CtrlMenu(mainGUI, usuarioLogueado); //Mandamos como argumento la vista y el usuario al controlador
                 mainGUI.setVisible(true);
+                mainGUI.ListaDeOpciones.setSelectedIndex(0); // marca la primera opción
+                mainGUI.ListaDeOpciones.requestFocusInWindow(); // da el foco
                 login.dispose();
             }
             else
