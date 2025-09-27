@@ -7,6 +7,7 @@ package modelo;
 
 public class Detalle_Pedido {
     private int id_detalle;
+    private int id_pedido;
     private int id_sopa;
     private int cantidad;
 
@@ -16,6 +17,14 @@ public class Detalle_Pedido {
 
     public void setId_detalle(int id_detalle) {
         this.id_detalle = id_detalle;
+    }
+
+    public int getId_pedido() {
+        return id_pedido;
+    }
+
+    public void setId_pedido(int id_pedido) {
+        this.id_pedido = id_pedido;
     }
 
     public int getId_sopa() {

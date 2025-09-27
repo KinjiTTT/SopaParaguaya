@@ -11,6 +11,8 @@
             <file>file:/C:/Users/Notebook/OneDrive/Documents/NetBeansProjects/SopaParaguaya/src/controlador/CtrlNuevoPedido.java</file>
             <file>file:/C:/Users/Notebook/OneDrive/Documents/NetBeansProjects/SopaParaguaya/src/dao/PedidosDAO.java</file>
             <file>file:/C:/Users/Notebook/OneDrive/Documents/NetBeansProjects/SopaParaguaya/src/dao/ClienteDAO.java</file>
+            <file>file:/C:/Users/Notebook/OneDrive/Documents/NetBeansProjects/SopaParaguaya/src/modelo/Pedido.java</file>
+            <file>file:/C:/Users/Notebook/OneDrive/Documents/NetBeansProjects/SopaParaguaya/src/modelo/Detalle_Pedido.java</file>
         </group>
     </open-files>
 </project-private>

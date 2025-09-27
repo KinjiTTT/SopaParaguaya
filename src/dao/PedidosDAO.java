@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import java.math.BigDecimal;
@@ -16,10 +12,6 @@ import modelo.Detalle_Pedido;
 import modelo.Sopa;
 import modelo.Pedido;
 
-/**
- *
- * @author Notebook
- */
 public class PedidosDAO {
     Connection conec;
     PreparedStatement sentencia;
@@ -54,23 +46,37 @@ public class PedidosDAO {
     }
     
     public void AgregarDetalle(Detalle_Pedido detalle){
-        
-    }
-    
-    public void AgregarPedido(Pedido pedido){
-        String sql = "INSERT INTO pedidos(id_cliente, id_usuario, id_detalle, estado) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO detalles_pedido(id_pedido, id_sopa, cantidad) VALUES (?,?,?)";
         
         try {
             sentencia = conec.prepareStatement(sql);
-            pedido.setId_cliente(resultSet.getInt("id_cliente"));
-            pedido.setId_usuario(resultSet.getInt("id_cliente"));
-            pedido.setId_detalle(resultSet.getInt("id_detalle"));
+            sentencia.setInt(1, detalle.getId_pedido());
+            sentencia.setInt(2, detalle.getId_sopa());
+            sentencia.setInt(3, detalle.getCantidad());
             sentencia.executeUpdate();
-            
-            JOptionPane.showMessageDialog(null, "Pedido agregado exitosamente");
             
         } catch (SQLException ex) {
             System.getLogger(ClienteDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
+    }
+    
+    public int AgregarPedido(Pedido pedido){
+        int id = -1;
+        String sql = "INSERT INTO pedidos(id_cliente, id_usuario) VALUES (?,?)";
+        
+        try {
+            sentencia = conec.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            sentencia.setInt(1, pedido.getId_cliente());
+            sentencia.setInt(2, pedido.getId_usuario());
+            sentencia.executeUpdate();
+            resultSet = sentencia.getGeneratedKeys();
+            if (resultSet.next()) {
+            id = resultSet.getInt(1);
+        }
+            
+        } catch (SQLException ex) {
+            System.getLogger(ClienteDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return id;
     }
 }

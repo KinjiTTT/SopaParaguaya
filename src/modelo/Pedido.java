@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 public class Pedido {
     private int id_pedido;
-    private int id_detalle;
     private int id_usuario;
     private int id_cliente;
     private LocalDateTime fecha_pedido;
@@ -17,14 +16,6 @@ public class Pedido {
 
     public void setId_pedido(int id_pedido) {
         this.id_pedido = id_pedido;
-    }
-
-    public int getId_detalle() {
-        return id_detalle;
-    }
-
-    public void setId_detalle(int id_detalle) {
-        this.id_detalle = id_detalle;
     }
 
     public int getId_usuario() {

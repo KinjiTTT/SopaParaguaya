@@ -74,6 +74,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
             //menu.spnCantidad.requestFocus();
         }
         if(e.getSource() == menu.btnConfirmarPedido){
+            AgregarPedido();
             menu.txtCliente.setEditable(true);
             menu.txtCliente.setText("");
             
@@ -239,33 +240,33 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
     }
     public void CrearTablaDetalles(){
         modelDetalles = new DefaultTableModel();
-        modelDetalles.addColumn("id");
-        modelDetalles.addColumn("sopa");
+        modelDetalles.addColumn("sopa"); //Guardara todo el objeto Sopa al igual que el comboBox del tamaño
         modelDetalles.addColumn("cantidad");
         modelDetalles.addColumn("precio");
         menu.tblDetalles.setModel(modelDetalles);
-        
+        /*
         menu.tblDetalles.getColumnModel().getColumn(0).setMinWidth(0);
         menu.tblDetalles.getColumnModel().getColumn(0).setMaxWidth(0);
-    }
+        */
+}
     public void AgregarDetalle(){
         
         Detalle_Pedido detalle = new Detalle_Pedido();
         Sopa sopaSeleccionada = new Sopa();
         sopaSeleccionada = (Sopa) menu.cmbTamañoSopa.getSelectedItem();
+        System.out.println(sopaSeleccionada.getPrecio());
         int cantidad = (int) menu.spnCantidad.getValue();
-        if(cantidad > 0)
+        if(cantidad > 0 || menu.txtCliente.getText().isEmpty())
         {
             detalle.setId_sopa(sopaSeleccionada.getId());
             detalle.setCantidad(cantidad);
 
-            Object[] fila = new Object[4];
-            fila[0] = detalle;
-            fila[1] = sopaSeleccionada.getTamaño();
-            fila[2] = detalle.getCantidad();
+            Object[] fila = new Object[3];
+            fila[0] = sopaSeleccionada;
+            fila[1] = detalle.getCantidad();
             BigDecimal subtotal = sopaSeleccionada.getPrecio().multiply(BigDecimal.valueOf(detalle.getCantidad()));
 
-            fila[3] = subtotal;
+            fila[2] = subtotal;
             modelDetalles.addRow(fila);
             
             //menu.lblTotalAPagar.setText();
@@ -277,9 +278,37 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
     }
     public void AgregarPedido(){
         Pedido pedido = new Pedido();
-        pedido.setId_cliente(clienteSeleccionado.getId());
-        pedido.setId_usuario(usuario.getId_usuario());
-        pedido.setEstado("fldsmdfr");
+        pedido.setId_cliente(clienteSeleccionado.getId()); //Guardamos el id del cliente seleccionado en el objeto que ira al DAO
+        pedido.setId_usuario(usuario.getId_usuario()); //Lo mismo con el usuario logueado
+        //pedido.setEstado("fldsmdfr"); ya esta por default "pendiente" en la BD
+        
+        int id_pedido = pedDAO.AgregarPedido(pedido); // Se guarda el Pedido y el metodo retorna el id generado en el pedido agregado
+        JOptionPane.showMessageDialog(null, "Pedido agregado exitosamente");
+        System.out.println("ID generado: " + id_pedido);
+        if (id_pedido > 0){ //si no funciona retornara -1, para ello esta la condicion
+            int filas = menu.tblDetalles.getRowCount();
+            int cantidad;
+            for(int i = 0; i < filas; i++){
+                Sopa sopaDetalle = new Sopa();
+                Detalle_Pedido detalle = new Detalle_Pedido();
+                sopaDetalle = (Sopa) menu.tblDetalles.getValueAt(i, 0);
+                cantidad = (int) menu.tblDetalles.getValueAt(i,1);
+                detalle.setId_pedido(id_pedido);
+                detalle.setId_sopa(sopaDetalle.getId());
+                detalle.setCantidad(cantidad);
+
+                pedDAO.AgregarDetalle(detalle);
+            }
+            JOptionPane.showMessageDialog(null, "Pedido y detalles guardados exitosamente");
+            CrearTablaDetalles(); // limpiar la tabla
+            clienteSeleccionado = null; //ya no hay cliente seleccionado
+            
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Error al guardar el pedido");
+        }
+        
+        
     }
     
     
