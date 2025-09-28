@@ -29,7 +29,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
     private MenuGUI menu;
     private ClienteDAO cliDAO = new ClienteDAO();
     private PedidosDAO pedDAO = new PedidosDAO();
-    List<Sopa> listaDeSopas;
+    private List<Sopa> listaDeSopas;
     private DefaultComboBoxModel<Sopa> modelComboBox= new DefaultComboBoxModel<>();
     private DefaultTableModel modelBuscador = new DefaultTableModel();
     private DefaultTableModel modelDetalles = new DefaultTableModel();
@@ -55,6 +55,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         this.menu.cmbTamañoSopa.setModel(modelComboBox);
         
         this.menu.cmbTamañoSopa.addActionListener(this);
+        this.menu.cmbTamañoSopa.addKeyListener(this);
         this.menu.spnCantidad.addKeyListener(this);
         this.menu.btnAgregarDetalle.addActionListener(this);
         this.menu.btnConfirmarPedido.addActionListener(this);
@@ -70,20 +71,19 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         {
            AgregarDetalle();
         }
-        if(e.getSource() == menu.cmbTamañoSopa){
-            //menu.spnCantidad.requestFocus();
-        }
         if(e.getSource() == menu.btnConfirmarPedido){
             AgregarPedido();
-            menu.txtCliente.setEditable(true);
-            menu.txtCliente.setText("");
-            
         }
         if(e.getSource() == menu.btnCancelarPedido){
-            menu.txtCliente.setEditable(true);
-            menu.txtCliente.setText("");
-            menu.spnCantidad.setValue(1);
-            CrearTablaDetalles();
+            menu.txtCliente.setEditable(true); //Hacemos editable el textfield del cliente
+            menu.txtCliente.setText(""); //Vaciamos el campo
+            menu.spnCantidad.setValue(1);//cantidad predeterminada 1
+            menu.cmbTamañoSopa.setSelectedIndex(0); //seleccion predeterminada (la primera)
+            CrearTablaDetalles(); //limpiamos la tabla (añadiendo una nuevo)
+            clienteSeleccionado = new Cliente(); //ya no hay cliente seleccionado
+            menu.lblTotalAPagar.setText("0 GS");
+            menu.txtCliente.requestFocusInWindow();
+            
         }
     }
 
@@ -147,6 +147,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
                 menu.cmbTamañoSopa.requestFocus();
             }
         }
+        
         if (e.getSource() == menu.cmbTamañoSopa)
         {
             if (e.getKeyCode() == KeyEvent.VK_ENTER)
@@ -269,7 +270,12 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
             fila[2] = subtotal;
             modelDetalles.addRow(fila);
             
-            //menu.lblTotalAPagar.setText();
+            BigDecimal total = BigDecimal.ZERO;
+            for(int i = 0; i < menu.tblDetalles.getRowCount(); i++){
+                BigDecimal sub = (BigDecimal) menu.tblDetalles.getValueAt(i, 2); // columna del subtotal
+                total = total.add(sub);
+            }
+            menu.lblTotalAPagar.setText(total.toString() + " GS");
         }
         else
         {
@@ -283,7 +289,6 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         //pedido.setEstado("fldsmdfr"); ya esta por default "pendiente" en la BD
         
         int id_pedido = pedDAO.AgregarPedido(pedido); // Se guarda el Pedido y el metodo retorna el id generado en el pedido agregado
-        JOptionPane.showMessageDialog(null, "Pedido agregado exitosamente");
         System.out.println("ID generado: " + id_pedido);
         if (id_pedido > 0){ //si no funciona retornara -1, para ello esta la condicion
             int filas = menu.tblDetalles.getRowCount();
@@ -300,8 +305,17 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
                 pedDAO.AgregarDetalle(detalle);
             }
             JOptionPane.showMessageDialog(null, "Pedido y detalles guardados exitosamente");
-            CrearTablaDetalles(); // limpiar la tabla
-            clienteSeleccionado = null; //ya no hay cliente seleccionado
+            
+            menu.txtCliente.setEditable(true); //Hacemos editable el textfield del Cliente
+            menu.txtCliente.setText(""); //Vaciamos el campo
+            menu.spnCantidad.setValue(1);//cantidad predeterminada 1
+            menu.cmbTamañoSopa.setSelectedIndex(0); //seleccion predeterminada (la primera)
+            menu.lblTotalAPagar.setText("0 GS");
+            CrearTablaDetalles(); //limpiamos la tabla detalles
+            clienteSeleccionado = new Cliente(); //ya no hay cliente seleccionado
+            menu.txtCliente.requestFocusInWindow();
+            
+            
             
         }
         else{
