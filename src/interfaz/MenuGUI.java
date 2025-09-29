@@ -44,7 +44,7 @@ public class MenuGUI extends javax.swing.JFrame {
         pnlGanancias = new javax.swing.JPanel();
         lblGanancias = new javax.swing.JLabel();
         NuevoPedidoCRUD = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblTituloNuevoPedido = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -72,6 +72,7 @@ public class MenuGUI extends javax.swing.JFrame {
         txtNombreCliente = new javax.swing.JTextField();
         txtTelefonoCliente = new javax.swing.JTextField();
         PedidosCRUD = new javax.swing.JPanel();
+        lblTituloPedidos = new javax.swing.JLabel();
         PanelMenu = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         ListaDeOpciones = new javax.swing.JList<>();
@@ -128,10 +129,10 @@ public class MenuGUI extends javax.swing.JFrame {
 
         NuevoPedidoCRUD.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Txt_IV50", 1, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("NUEVO PEDIDO");
-        NuevoPedidoCRUD.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 651, 100));
+        lblTituloNuevoPedido.setFont(new java.awt.Font("Txt_IV50", 1, 24)); // NOI18N
+        lblTituloNuevoPedido.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTituloNuevoPedido.setText("NUEVO PEDIDO");
+        NuevoPedidoCRUD.add(lblTituloNuevoPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 100));
 
         jLabel2.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         jLabel2.setText("Detalles:");
@@ -161,8 +162,8 @@ public class MenuGUI extends javax.swing.JFrame {
         NuevoPedidoCRUD.add(txtCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 128, 150, -1));
 
         lblTotalAPagar.setFont(new java.awt.Font("Wide Latin", 0, 18)); // NOI18N
-        lblTotalAPagar.setText("0 Gs");
-        NuevoPedidoCRUD.add(lblTotalAPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, 155, 20));
+        lblTotalAPagar.setText("0 GS");
+        NuevoPedidoCRUD.add(lblTotalAPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, 200, 20));
 
         jScrollPane3.setBorder(new javax.swing.border.MatteBorder(null));
 
@@ -291,16 +292,12 @@ public class MenuGUI extends javax.swing.JFrame {
 
         PanelImagenes.add(ClientesCRUD, "ClientesCRUD");
 
-        javax.swing.GroupLayout PedidosCRUDLayout = new javax.swing.GroupLayout(PedidosCRUD);
-        PedidosCRUD.setLayout(PedidosCRUDLayout);
-        PedidosCRUDLayout.setHorizontalGroup(
-            PedidosCRUDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
-        );
-        PedidosCRUDLayout.setVerticalGroup(
-            PedidosCRUDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
-        );
+        PedidosCRUD.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblTituloPedidos.setFont(new java.awt.Font("Txt_IV50", 1, 24)); // NOI18N
+        lblTituloPedidos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTituloPedidos.setText("Pedidos");
+        PedidosCRUD.add(lblTituloPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 92));
 
         PanelImagenes.add(PedidosCRUD, "PedidosCRUD");
 
@@ -368,7 +365,6 @@ public class MenuGUI extends javax.swing.JFrame {
     public javax.swing.JButton btnEliminarCliente;
     public javax.swing.JButton btnModificarCliente;
     public javax.swing.JComboBox<Sopa> cmbTamañoSopa;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -386,6 +382,8 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JLabel lblPagos;
     private javax.swing.JLabel lblPedidos;
     private javax.swing.JLabel lblTelefonoCliente;
+    private javax.swing.JLabel lblTituloNuevoPedido;
+    private javax.swing.JLabel lblTituloPedidos;
     public javax.swing.JLabel lblTotalAPagar;
     private javax.swing.JPanel pnlClientes;
     private javax.swing.JPanel pnlGanancias;

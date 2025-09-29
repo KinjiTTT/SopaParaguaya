@@ -3,11 +3,14 @@ package controlador;
 import dao.ClienteDAO;
 import dao.PedidosDAO;
 import interfaz.MenuGUI;
+import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +27,7 @@ import modelo.Detalle_Pedido;
 import modelo.Pedido;
 import modelo.Login;
 
-public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentListener {
+public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentListener, MouseListener {
 
     private MenuGUI menu;
     private ClienteDAO cliDAO = new ClienteDAO();
@@ -35,10 +38,12 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
     private DefaultTableModel modelDetalles = new DefaultTableModel();
     private Cliente clienteSeleccionado = new Cliente();
     private Login usuario;
+    private CardLayout cardLayout;
 
     public CtrlNuevoPedido(MenuGUI menu, Login usuario) {
         this.menu = menu;
         this.usuario = usuario;
+        this.cardLayout = (CardLayout) menu.getPanelImagenes().getLayout();
         CrearTablaBuscador();
         CrearTablaDetalles();
         this.menu.tblCliente.setVisible(false);
@@ -63,6 +68,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         this.menu.spnCantidad.setValue(1);
         
         this.menu.btnCancelarPedido.addActionListener(this);
+        this.menu.tblCliente.addKeyListener(this);
     }
     //---------------------------------------------Listeners---------------------------------------------//
     @Override
@@ -86,65 +92,55 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
             
         }
     }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        
-    }
-
     @Override
     public void keyPressed(KeyEvent e) {
         
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            menu.ListaDeOpciones.requestFocusInWindow();
+            cardLayout.show(menu.getPanelImagenes(), "Nuevo Pedido");
+        }
+        
         if(e.getSource() == menu.txtCliente)
         {
-            
-            if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            int filaSeleccionada = 0;
+            if (e.getKeyCode() == KeyEvent.VK_ENTER && menu.tblCliente.getRowCount() > 0)
             {
-                if (menu.tblCliente.getRowCount() > 0)
-                {
-                    clienteSeleccionado.setId((int) menu.tblCliente.getValueAt(0, 0));
-                    clienteSeleccionado.setNombre((String) menu.tblCliente.getValueAt(0, 1));
-                    clienteSeleccionado.setTelefono((String) menu.tblCliente.getValueAt(0, 2));
-                    menu.txtCliente.setText(clienteSeleccionado.getNombre());
-                    menu.txtCliente.setEditable(false);
-                    menu.tblCliente.setVisible(false);
-                    menu.cmbTamañoSopa.requestFocus();
-                }
-                if (e.getKeyCode() == KeyEvent.VK_DOWN && menu.tblCliente.getRowCount() > 0) 
+                SeleccionDeCliente(filaSeleccionada);
+                    /*
+                        Esta es otra forma de hacer, sin usar un cast (int) en la declaracion, sino que transformamos a int el objeto seleccionado
+                        Object valor = menu.tblCliente.getValueAt(row, 0);
+                        int id = Integer.parseInt(valor.toString()); // obs: todo objeto tiene toString, por lo que de esta manera transformamos las cosas sin problemas
+                        */
+                        /*
+                        int id = (int) menu.tblCliente.getValueAt(row, 0); // con el parentesis (int) le damos la orden de que trate ese dato como int, si no lo es no funciona, osea asume
+                        String nombre = (String) menu.tblCliente.getValueAt(row, 1); // lo mismo aca, asumimos que es String con el cast para tratar ese dato como tal
+                        String telefono = (String) menu.tblCliente.getValueAt(row, 2);
+
+                        System.out.println("Cliente seleccionado: " + nombre + ", ID: " + id);
+                        menu.txtCliente.setText(nombre);
+                        menu.tblCliente.setVisible(false);
+                    */
+            }
+            if (e.getKeyCode() == KeyEvent.VK_DOWN && menu.tblCliente.getRowCount() > 0) 
                 {
                     menu.tblCliente.requestFocusInWindow();
                     menu.tblCliente.setRowSelectionInterval(0, 0);
                     return;
                 }
-            
-            /*
-            Esta es otra forma de hacer, sin usar un cast (int) en la declaracion, sino que transformamos a int el objeto seleccionado
-            Object valor = menu.tblCliente.getValueAt(row, 0);
-            int id = Integer.parseInt(valor.toString()); // obs: todo objeto tiene toString, por lo que de esta manera transformamos las cosas sin problemas
-            */
-            /*
-            int id = (int) menu.tblCliente.getValueAt(row, 0); // con el parentesis (int) le damos la orden de que trate ese dato como int, si no lo es no funciona, osea asume
-            String nombre = (String) menu.tblCliente.getValueAt(row, 1); // lo mismo aca, asumimos que es String con el cast para tratar ese dato como tal
-            String telefono = (String) menu.tblCliente.getValueAt(row, 2);
-
-            System.out.println("Cliente seleccionado: " + nombre + ", ID: " + id);
-            menu.txtCliente.setText(nombre);
-            menu.tblCliente.setVisible(false);
-            */
-            }
            
         }
         if (e.getSource() == menu.tblCliente)
         {
-            int row = menu.tblCliente.getSelectedRow();
-            if(row != -1 && e.getKeyCode() == KeyEvent.VK_ENTER)
+            int filaSeleccionada = menu.tblCliente.getSelectedRow();
+            if(filaSeleccionada != -1 && e.getKeyCode() == KeyEvent.VK_ENTER)
             {
-                clienteSeleccionado.setId((int) menu.tblCliente.getValueAt(0, 0));
-                clienteSeleccionado.setNombre((String) menu.tblCliente.getValueAt(0, 1));
-                clienteSeleccionado.setTelefono((String) menu.tblCliente.getValueAt(0, 2));
-                menu.txtCliente.setText(clienteSeleccionado.getNombre());
-                menu.tblCliente.setVisible(false);
-                menu.cmbTamañoSopa.requestFocus();
+                SeleccionDeCliente(filaSeleccionada);
+                
+            }
+            if(filaSeleccionada == 0 && e.getKeyCode() == KeyEvent.VK_UP){
+                //e.consume(); // evita que JTable procese la tecla
+                menu.txtCliente.requestFocusInWindow();
+                menu.tblCliente.clearSelection();
             }
         }
         
@@ -167,9 +163,10 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        
-    }
+    public void keyTyped(KeyEvent e) {}
+    
+    @Override
+    public void keyReleased(KeyEvent e) {}
 
     @Override
     public void insertUpdate(DocumentEvent e) {
@@ -182,9 +179,32 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
     }
 
     @Override
-    public void changedUpdate(DocumentEvent e) {
+    public void changedUpdate(DocumentEvent e) {}
+    
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int filaSeleccionada = menu.tblCliente.getSelectedRow();
+        if(e.getClickCount() == 2 && e.getSource() == menu.tblCliente)
+        {
+            SeleccionDeCliente(filaSeleccionada); //no funciona
+        }
         
+  
     }
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
+    
+    
     //---------------------------------------------Metodos---------------------------------------------//
     private void filtrar() {
         DefaultTableModel modelo = (DefaultTableModel) menu.tblCliente.getModel();
@@ -286,23 +306,23 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         Pedido pedido = new Pedido();
         pedido.setId_cliente(clienteSeleccionado.getId()); //Guardamos el id del cliente seleccionado en el objeto que ira al DAO
         pedido.setId_usuario(usuario.getId_usuario()); //Lo mismo con el usuario logueado
-        //pedido.setEstado("fldsmdfr"); ya esta por default "pendiente" en la BD
-        
-        int id_pedido = pedDAO.AgregarPedido(pedido); // Se guarda el Pedido y el metodo retorna el id generado en el pedido agregado
-        System.out.println("ID generado: " + id_pedido);
-        if (id_pedido > 0){ //si no funciona retornara -1, para ello esta la condicion
-            int filas = menu.tblDetalles.getRowCount();
-            int cantidad;
-            for(int i = 0; i < filas; i++){
-                Sopa sopaDetalle = new Sopa();
-                Detalle_Pedido detalle = new Detalle_Pedido();
-                sopaDetalle = (Sopa) menu.tblDetalles.getValueAt(i, 0);
-                cantidad = (int) menu.tblDetalles.getValueAt(i,1);
-                detalle.setId_pedido(id_pedido);
-                detalle.setId_sopa(sopaDetalle.getId());
-                detalle.setCantidad(cantidad);
+        int filasDetalles = menu.tblDetalles.getRowCount();
+        if(menu.tblDetalles.getRowCount() > 0){
+            int id_pedido = pedDAO.AgregarPedido(pedido); // Se guarda el Pedido y el metodo retorna el id generado en el pedido agregado
+            System.out.println("ID generado: " + id_pedido);
+            if (id_pedido > 0){ //si no funciona retornara -1, para ello esta la condicion
+                
+                int cantidad;
+                for(int i = 0; i < filasDetalles; i++){
+                    Sopa sopaDetalle = new Sopa();
+                    Detalle_Pedido detalle = new Detalle_Pedido();
+                    sopaDetalle = (Sopa) menu.tblDetalles.getValueAt(i, 0);
+                    cantidad = (int) menu.tblDetalles.getValueAt(i,1);
+                    detalle.setId_pedido(id_pedido);
+                    detalle.setId_sopa(sopaDetalle.getId());
+                    detalle.setCantidad(cantidad);
 
-                pedDAO.AgregarDetalle(detalle);
+                    pedDAO.AgregarDetalle(detalle);
             }
             JOptionPane.showMessageDialog(null, "Pedido y detalles guardados exitosamente");
             
@@ -317,13 +337,26 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
             
             
             
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Error al guardar el pedido\nPosible razon: Error en el campo del cliente\n(Vacio o mal seleccionado)");
+            }
         }
         else{
-            JOptionPane.showMessageDialog(null, "Error al guardar el pedido");
+            JOptionPane.showMessageDialog(null, "No se pudo guardar el pedido\nRazon: No hay detalles");
         }
+        
+        
         
         
     }
-    
-    
+    public void SeleccionDeCliente(int filaSeleccionada){
+        clienteSeleccionado.setId((int) menu.tblCliente.getValueAt(filaSeleccionada, 0));
+        clienteSeleccionado.setNombre((String) menu.tblCliente.getValueAt(filaSeleccionada, 1));
+        clienteSeleccionado.setTelefono((String) menu.tblCliente.getValueAt(filaSeleccionada, 2));
+        menu.txtCliente.setText(clienteSeleccionado.getNombre());
+        menu.txtCliente.setEditable(false);
+        menu.tblCliente.setVisible(false);
+        menu.cmbTamañoSopa.requestFocus();
+    }
 }
