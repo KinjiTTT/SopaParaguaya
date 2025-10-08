@@ -73,6 +73,11 @@ public class MenuGUI extends javax.swing.JFrame {
         txtTelefonoCliente = new javax.swing.JTextField();
         PedidosCRUD = new javax.swing.JPanel();
         lblTituloPedidos = new javax.swing.JLabel();
+        PanelDividido = new javax.swing.JSplitPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tblPedidos = new javax.swing.JTable();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblDetallesPedido = new javax.swing.JTable();
         PanelMenu = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         ListaDeOpciones = new javax.swing.JList<>();
@@ -297,7 +302,41 @@ public class MenuGUI extends javax.swing.JFrame {
         lblTituloPedidos.setFont(new java.awt.Font("Txt_IV50", 1, 24)); // NOI18N
         lblTituloPedidos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTituloPedidos.setText("Pedidos");
-        PedidosCRUD.add(lblTituloPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 92));
+        PedidosCRUD.add(lblTituloPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 80));
+
+        PanelDividido.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        tblPedidos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane5.setViewportView(tblPedidos);
+
+        PanelDividido.setTopComponent(jScrollPane5);
+
+        tblDetallesPedido.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane6.setViewportView(tblDetallesPedido);
+
+        PanelDividido.setRightComponent(jScrollPane6);
+
+        PedidosCRUD.add(PanelDividido, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 520, 340));
 
         PanelImagenes.add(PedidosCRUD, "PedidosCRUD");
 
@@ -355,6 +394,7 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JPanel ClientesCRUD;
     public javax.swing.JList<String> ListaDeOpciones;
     private javax.swing.JPanel NuevoPedidoCRUD;
+    public javax.swing.JSplitPane PanelDividido;
     private javax.swing.JPanel PanelImagenes;
     private javax.swing.JPanel PanelMenu;
     private javax.swing.JPanel PedidosCRUD;
@@ -375,6 +415,8 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     public javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JLabel lblGanancias;
     private javax.swing.JLabel lblHistorial;
     private javax.swing.JLabel lblNombreCliente;
@@ -395,6 +437,8 @@ public class MenuGUI extends javax.swing.JFrame {
     public javax.swing.JTable tblCliente;
     public javax.swing.JTable tblClientes;
     public javax.swing.JTable tblDetalles;
+    public javax.swing.JTable tblDetallesPedido;
+    public javax.swing.JTable tblPedidos;
     public javax.swing.JTextField txtCliente;
     public javax.swing.JTextField txtNombreCliente;
     public javax.swing.JTextField txtTelefonoCliente;

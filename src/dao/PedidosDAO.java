@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
@@ -16,6 +17,8 @@ public class PedidosDAO {
     Connection conec;
     PreparedStatement sentencia;
     ResultSet resultSet;
+    DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    
     public PedidosDAO(){
         Conexion conexionBD = new Conexion();
         try {
@@ -79,4 +82,69 @@ public class PedidosDAO {
         }
         return id;
     }
+    
+    public ArrayList<Pedido> CargarPedidos() {
+        ArrayList<Pedido> listaPedidos = new ArrayList<>();
+        String sql = "SELECT * FROM pedidos ORDER BY fecha_pedido DESC";
+
+        try {
+            sentencia = conec.prepareStatement(sql);
+            resultSet = sentencia.executeQuery();
+
+            while (resultSet.next()) {
+                Pedido pedido = new Pedido();
+
+                pedido.setId_pedido(resultSet.getInt("id_pedido")); // ← corregido, antes usabas id_cliente
+                pedido.setId_cliente(resultSet.getInt("id_cliente"));
+                pedido.setId_usuario(resultSet.getInt("id_usuario"));
+
+                // 🔹 convertir SQL Timestamp → LocalDateTime
+                java.sql.Timestamp tsPedido = resultSet.getTimestamp("fecha_pedido");
+                if (tsPedido != null) {
+                    pedido.setFecha_pedido(tsPedido.toLocalDateTime());
+                    pedido.setFecha_pedido_formateada(pedido.getFecha_pedido().format(formato));
+                }
+
+                java.sql.Timestamp tsEntrega = resultSet.getTimestamp("fecha_entrega");
+                if (tsEntrega != null) {
+                    pedido.setFecha_entrega(tsEntrega.toLocalDateTime());
+                    pedido.setFecha_entrega_formateada(pedido.getFecha_entrega().format(formato));
+                }
+
+                pedido.setEstado(resultSet.getString("estado"));
+
+                listaPedidos.add(pedido);
+            }
+        } catch (SQLException ex) {
+            System.getLogger(ClienteDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+
+        return listaPedidos;
+    }
+    
+    public ArrayList<Detalle_Pedido> CargarDetallesPedido(int id_pedido){
+        ArrayList<Detalle_Pedido> listaDetalles = new ArrayList<>();
+        String sql = "SELECT * FROM detalles_pedido WHERE id_pedido = ?";
+
+        try {
+            sentencia = conec.prepareStatement(sql);
+            sentencia.setInt(1, id_pedido);
+            resultSet = sentencia.executeQuery();
+
+            while (resultSet.next()) {
+                Detalle_Pedido detalle = new Detalle_Pedido();
+
+                detalle.setId_detalle(resultSet.getInt("id_detalle"));
+                detalle.setId_pedido(resultSet.getInt("id_pedido"));
+                detalle.setId_sopa(resultSet.getInt("id_sopa"));
+                detalle.setCantidad(resultSet.getInt("cantidad"));
+
+                listaDetalles.add(detalle);
+            }
+        } catch (SQLException ex) {
+            System.getLogger(ClienteDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return listaDetalles;
+    }
+
 }

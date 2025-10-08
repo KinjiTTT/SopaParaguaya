@@ -16,6 +16,7 @@ public class CtrlMenu {
     private CardLayout cardLayout;
     private CtrlCliente ctrlCliente;
     private CtrlNuevoPedido ctrlNuevoPedido;
+    private CtrlPedidos ctrlPedidos;
     private Conexion conexion = new Conexion();
     private Login usuario;
     
@@ -25,9 +26,10 @@ public class CtrlMenu {
     {
         this.menu = menu;
         this.cardLayout = (CardLayout) menu.getPanelImagenes().getLayout();
-        this.ctrlCliente = new CtrlCliente(menu);
+        this.ctrlCliente = null;
         this.usuario = usuario;
-        this.ctrlNuevoPedido = new CtrlNuevoPedido(menu, usuario);
+        this.ctrlNuevoPedido = null;
+        this.ctrlPedidos = null;
         
         
         menu.getListaDeOpciones().addListSelectionListener(new ListSelectionListener() { //Es parecido a cuando usas un ActionListener predeterminado
@@ -54,17 +56,31 @@ public class CtrlMenu {
                 switch(seleccion)
                 {
                     case "Nuevo Pedido":
+                        if (ctrlNuevoPedido == null) {
+                            ctrlNuevoPedido = new CtrlNuevoPedido(menu, usuario);
+                            System.out.println("Controlador de Nuevo Pedido inicializado.");
+                        }
                         menu.txtCliente.requestFocusInWindow();
                         cardLayout.show(menu.getPanelImagenes(), "Nuevo Pedido CRUD");
                         
+                        
                         break;
                     case "Pedidos":
+                        if (ctrlPedidos == null) {
+                            ctrlPedidos = new CtrlPedidos(menu, usuario);
+                            System.out.println("Controlador de Pedidos inicializado.");
+                        }
+                        cardLayout.show(menu.getPanelImagenes(), "PedidosCRUD");
                         
                         break;
                     case "Pagos":
                         
                         break;
                     case "Clientes":
+                        if (ctrlCliente == null) {
+                            ctrlCliente = new CtrlCliente(menu);
+                            System.out.println("Controlador de Clientes inicializado.");
+                        }
                         ctrlCliente.LlenarTabla();
                         cardLayout.show(menu.getPanelImagenes(), "ClientesCRUD");
                         menu.txtNombreCliente.requestFocusInWindow(); // foco directo en el campo

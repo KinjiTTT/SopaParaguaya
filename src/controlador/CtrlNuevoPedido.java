@@ -41,6 +41,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
     private CardLayout cardLayout;
 
     public CtrlNuevoPedido(MenuGUI menu, Login usuario) {
+        System.out.println("alskfda;s");
         this.menu = menu;
         this.usuario = usuario;
         this.cardLayout = (CardLayout) menu.getPanelImagenes().getLayout();
@@ -69,6 +70,8 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         
         this.menu.btnCancelarPedido.addActionListener(this);
         this.menu.tblCliente.addKeyListener(this);
+        
+        
     }
     //---------------------------------------------Listeners---------------------------------------------//
     @Override
@@ -81,14 +84,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
             AgregarPedido();
         }
         if(e.getSource() == menu.btnCancelarPedido){
-            menu.txtCliente.setEditable(true); //Hacemos editable el textfield del cliente
-            menu.txtCliente.setText(""); //Vaciamos el campo
-            menu.spnCantidad.setValue(1);//cantidad predeterminada 1
-            menu.cmbTamañoSopa.setSelectedIndex(0); //seleccion predeterminada (la primera)
-            CrearTablaDetalles(); //limpiamos la tabla (añadiendo una nuevo)
-            clienteSeleccionado = new Cliente(); //ya no hay cliente seleccionado
-            menu.lblTotalAPagar.setText("0 GS");
-            menu.txtCliente.requestFocusInWindow();
+            Reiniciar();
             
         }
     }
@@ -96,8 +92,10 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
     public void keyPressed(KeyEvent e) {
         
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            Reiniciar();
             menu.ListaDeOpciones.requestFocusInWindow();
             cardLayout.show(menu.getPanelImagenes(), "Nuevo Pedido");
+            System.err.println("Se presiono Escape desde Nuevo Pedido");
         }
         
         if(e.getSource() == menu.txtCliente)
@@ -153,10 +151,15 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         }
         if (e.getSource() == menu.spnCantidad)
         {
+            //Este componente tiene un valor default para ESCAPE, por lo que apretar esa tecla no ejecutara su funcion global puesta
             if (e.getKeyCode() == KeyEvent.VK_ENTER)
             {
                 menu.btnAgregarDetalle.doClick();
+                menu.cmbTamañoSopa.requestFocusInWindow(); //volvemos a la seleccion del tamaño
+                menu.cmbTamañoSopa.setSelectedIndex(0);
+                menu.spnCantidad.setValue(1);
             }
+           
         }
             
             
@@ -269,7 +272,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         menu.tblDetalles.getColumnModel().getColumn(0).setMinWidth(0);
         menu.tblDetalles.getColumnModel().getColumn(0).setMaxWidth(0);
         */
-}
+    }
     public void AgregarDetalle(){
         
         Detalle_Pedido detalle = new Detalle_Pedido();
@@ -326,17 +329,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
             }
             JOptionPane.showMessageDialog(null, "Pedido y detalles guardados exitosamente");
             
-            menu.txtCliente.setEditable(true); //Hacemos editable el textfield del Cliente
-            menu.txtCliente.setText(""); //Vaciamos el campo
-            menu.spnCantidad.setValue(1);//cantidad predeterminada 1
-            menu.cmbTamañoSopa.setSelectedIndex(0); //seleccion predeterminada (la primera)
-            menu.lblTotalAPagar.setText("0 GS");
-            CrearTablaDetalles(); //limpiamos la tabla detalles
-            clienteSeleccionado = new Cliente(); //ya no hay cliente seleccionado
-            menu.txtCliente.requestFocusInWindow();
-            
-            
-            
+            Reiniciar();
             }
             else{
                 JOptionPane.showMessageDialog(null, "Error al guardar el pedido\nPosible razon: Error en el campo del cliente\n(Vacio o mal seleccionado)");
@@ -358,5 +351,16 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         menu.txtCliente.setEditable(false);
         menu.tblCliente.setVisible(false);
         menu.cmbTamañoSopa.requestFocus();
+    }
+    
+    public void Reiniciar(){
+        menu.txtCliente.setEditable(true); //Hacemos editable el textfield del cliente
+        menu.txtCliente.setText(""); //Vaciamos el campo
+        menu.spnCantidad.setValue(1);//cantidad predeterminada 1
+        menu.cmbTamañoSopa.setSelectedIndex(0); //seleccion predeterminada (la primera)
+        CrearTablaDetalles(); //limpiamos la tabla (añadiendo una nuevo)
+        clienteSeleccionado = new Cliente(); //ya no hay cliente seleccionado
+        menu.lblTotalAPagar.setText("0 GS");
+        menu.txtCliente.requestFocusInWindow();
     }
 }
