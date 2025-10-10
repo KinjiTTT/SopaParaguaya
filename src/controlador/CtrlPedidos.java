@@ -27,6 +27,7 @@ public class CtrlPedidos extends KeyAdapter implements ActionListener {
         this.usuario = usuario;
         this.cardLayout = (CardLayout) menu.getPanelImagenes().getLayout();
         LlenarTablaPedidos();
+        CrearTablaDetallesPedido();
         //LlenarTablaDetalles();
         menu.tblPedidos.getSelectionModel().addListSelectionListener(e -> {
         if (!e.getValueIsAdjusting()) {
@@ -36,6 +37,7 @@ public class CtrlPedidos extends KeyAdapter implements ActionListener {
                 int id_pedido = (int) menu.tblPedidos.getValueAt(filaSeleccionada, 0);
                 // Cargar los detalles del pedido en la otra tabla
                 LlenarTablaDetalles(id_pedido);
+                InformacionDePedido(id_pedido);
             }
         }
         });
@@ -95,8 +97,8 @@ public class CtrlPedidos extends KeyAdapter implements ActionListener {
         
     }
     public void LlenarTablaDetalles(int id_pedido){
-        ArrayList<Detalle_Pedido> detalles = pedDAO.CargarDetallesPedido(5);
-        CrearTablaDetallesPedido();
+        ArrayList<Detalle_Pedido> detalles = pedDAO.CargarDetallesPedido(id_pedido);
+        modelDetallePedido.setRowCount(0); // Limpia las filas
         for(Detalle_Pedido d: detalles)
         {
             Object[] fila = new Object[4];
@@ -106,6 +108,16 @@ public class CtrlPedidos extends KeyAdapter implements ActionListener {
             fila[3] = d.getCantidad();
             modelDetallePedido.addRow(fila);
         }
+        
+    }
+    public void InformacionDePedido(int id_pedido){
+        ArrayList<Detalle_Pedido> detalles = pedDAO.CargarDetallesPedido(id_pedido);
+        menu.TextAreaInfoPedido.setText(""); // Limpia el Texto
+        StringBuilder cadena = new StringBuilder();
+        cadena.append(pedDAO.DetallesPedido(id_pedido));
+        menu.TextAreaInfoPedido.setText(cadena.toString());
+        System.out.println(cadena);
+        
         
     }
 }

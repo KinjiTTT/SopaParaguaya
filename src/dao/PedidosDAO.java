@@ -146,5 +146,50 @@ public class PedidosDAO {
         }
         return listaDetalles;
     }
+    
+    public String DetallesPedido(int id_pedido){
+        String sql = "SELECT\n" +
+                    "    p.id_pedido,\n" +
+                    "    c.nombre AS cliente,\n" +
+                    "    s.tamaño AS sopa,\n" +
+                    "    dp.cantidad,\n" +
+                    "    (dp.cantidad * s.precio) AS subtotal,\n" +
+                    "    SUM(dp.cantidad * s.precio) OVER (PARTITION BY p.id_pedido) AS total_pagar\n" +
+                    "FROM pedidos p\n" +
+                    "JOIN clientes c ON p.id_cliente = c.id_cliente\n" +
+                    "JOIN detalles_pedido dp ON p.id_pedido = dp.id_pedido\n" +
+                    "JOIN sopas s ON dp.id_sopa = s.id_sopa\n" +
+                    "WHERE p.id_pedido = ?\n" +
+                    "ORDER BY s.tamaño;";
+        
+        StringBuilder texto = new StringBuilder();
+        BigDecimal totalPagar = BigDecimal.ZERO;
+        String cliente = "";
+        texto.append("Pedido nro: ").append(id_pedido).append("\n");
+        
+        try {
+            sentencia = conec.prepareStatement(sql);
+            sentencia.setInt(1, id_pedido);
+            resultSet = sentencia.executeQuery();
+
+            while (resultSet.next()) {
+                cliente = resultSet.getString("cliente");
+
+                texto.append(resultSet.getString("sopa"))
+                .append(": ")
+                .append(resultSet.getInt("cantidad"))
+                .append("\n");
+                
+                totalPagar = resultSet.getBigDecimal("total_pagar");
+            }
+            texto.insert(0, "Cliente: " + cliente + "\n"); // agrega al principio
+            texto.append("\nTotal a pagar: ").append(totalPagar);
+            
+        } catch (SQLException ex) {
+            System.getLogger(ClienteDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        
+        return texto.toString();
+    }
 
 }

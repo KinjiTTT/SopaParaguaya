@@ -78,6 +78,8 @@ public class MenuGUI extends javax.swing.JFrame {
         tblPedidos = new javax.swing.JTable();
         jScrollPane6 = new javax.swing.JScrollPane();
         tblDetallesPedido = new javax.swing.JTable();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        TextAreaInfoPedido = new javax.swing.JTextArea();
         PanelMenu = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         ListaDeOpciones = new javax.swing.JList<>();
@@ -338,6 +340,12 @@ public class MenuGUI extends javax.swing.JFrame {
 
         PedidosCRUD.add(PanelDividido, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 520, 340));
 
+        TextAreaInfoPedido.setColumns(20);
+        TextAreaInfoPedido.setRows(5);
+        jScrollPane7.setViewportView(TextAreaInfoPedido);
+
+        PedidosCRUD.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 110, 310));
+
         PanelImagenes.add(PedidosCRUD, "PedidosCRUD");
 
         getContentPane().add(PanelImagenes, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, 700, 450));
@@ -398,6 +406,7 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JPanel PanelImagenes;
     private javax.swing.JPanel PanelMenu;
     private javax.swing.JPanel PedidosCRUD;
+    public javax.swing.JTextArea TextAreaInfoPedido;
     public javax.swing.JButton btnAgregarCliente;
     public javax.swing.JButton btnAgregarDetalle;
     public javax.swing.JButton btnCancelarPedido;
@@ -417,6 +426,7 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JLabel lblGanancias;
     private javax.swing.JLabel lblHistorial;
     private javax.swing.JLabel lblNombreCliente;
