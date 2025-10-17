@@ -49,13 +49,14 @@ public class PedidosDAO {
     }
     
     public void AgregarDetalle(Detalle_Pedido detalle){
-        String sql = "INSERT INTO detalles_pedido(id_pedido, id_sopa, cantidad) VALUES (?,?,?)";
+        String sql = "INSERT INTO detalles_pedido(id_pedido, id_sopa, cantidad, precio_venta) VALUES (?,?,?,?)";
         
         try {
             sentencia = conec.prepareStatement(sql);
             sentencia.setInt(1, detalle.getId_pedido());
             sentencia.setInt(2, detalle.getId_sopa());
             sentencia.setInt(3, detalle.getCantidad());
+            sentencia.setBigDecimal(4, detalle.getPrecio_venta());
             sentencia.executeUpdate();
             
         } catch (SQLException ex) {
@@ -65,12 +66,13 @@ public class PedidosDAO {
     
     public int AgregarPedido(Pedido pedido){
         int id = -1;
-        String sql = "INSERT INTO pedidos(id_cliente, id_usuario) VALUES (?,?)";
+        String sql = "INSERT INTO pedidos(id_cliente, id_usuario, total_pagar) VALUES (?,?,?)";
         
         try {
             sentencia = conec.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             sentencia.setInt(1, pedido.getId_cliente());
             sentencia.setInt(2, pedido.getId_usuario());
+            sentencia.setBigDecimal(3, pedido.getTotal_pagar());
             sentencia.executeUpdate();
             resultSet = sentencia.getGeneratedKeys();
             if (resultSet.next()) {
@@ -122,7 +124,7 @@ public class PedidosDAO {
         return listaPedidos;
     }
     
-    public ArrayList<Detalle_Pedido> CargarDetallesPedido(int id_pedido){
+    public ArrayList<Detalle_Pedido> CargarDetallesPedidoTabla(int id_pedido){
         ArrayList<Detalle_Pedido> listaDetalles = new ArrayList<>();
         String sql = "SELECT * FROM detalles_pedido WHERE id_pedido = ?";
 
@@ -147,49 +149,36 @@ public class PedidosDAO {
         return listaDetalles;
     }
     
-    public String DetallesPedido(int id_pedido){
-        String sql = "SELECT\n" +
-                    "    p.id_pedido,\n" +
-                    "    c.nombre AS cliente,\n" +
-                    "    s.tamaño AS sopa,\n" +
-                    "    dp.cantidad,\n" +
-                    "    (dp.cantidad * s.precio) AS subtotal,\n" +
-                    "    SUM(dp.cantidad * s.precio) OVER (PARTITION BY p.id_pedido) AS total_pagar\n" +
-                    "FROM pedidos p\n" +
-                    "JOIN clientes c ON p.id_cliente = c.id_cliente\n" +
-                    "JOIN detalles_pedido dp ON p.id_pedido = dp.id_pedido\n" +
-                    "JOIN sopas s ON dp.id_sopa = s.id_sopa\n" +
-                    "WHERE p.id_pedido = ?\n" +
-                    "ORDER BY s.tamaño;";
-        
-        StringBuilder texto = new StringBuilder();
-        BigDecimal totalPagar = BigDecimal.ZERO;
-        String cliente = "";
-        texto.append("Pedido nro: ").append(id_pedido).append("\n");
-        
+    public ArrayList<Object[]> CargarDetallesPedidoTexto(int id_pedido){
+        ArrayList<Object[]> listaDetalles = new ArrayList<>();
+        String sql ="SELECT p.id_pedido,c.nombre, s.tamaño, d.cantidad, d.precio_venta, p.total_pagar \n" +
+                    "FROM pedidos as p\n" +
+                    "INNER JOIN clientes as c ON p.id_cliente = c.id_cliente\n" +
+                    "INNER JOIN detalles_pedido as d ON p.id_pedido = d.id_pedido\n" +
+                    "INNER JOIN sopas as s ON d.id_sopa = s.id_sopa\n" +
+                    "WHERE p.id_pedido = ?";
+
         try {
             sentencia = conec.prepareStatement(sql);
             sentencia.setInt(1, id_pedido);
             resultSet = sentencia.executeQuery();
 
             while (resultSet.next()) {
-                cliente = resultSet.getString("cliente");
+                Object[] detalle = new Object[6];
 
-                texto.append(resultSet.getString("sopa"))
-                .append(": ")
-                .append(resultSet.getInt("cantidad"))
-                .append("\n");
-                
-                totalPagar = resultSet.getBigDecimal("total_pagar");
+                detalle[0] = resultSet.getInt("id_pedido");
+                detalle[1] = resultSet.getString("nombre");
+                detalle[2] = resultSet.getString("tamaño");
+                detalle[3] = resultSet.getInt("cantidad");
+                detalle[4] = resultSet.getBigDecimal("precio_venta");
+                detalle[5] = resultSet.getBigDecimal("total_pagar");
+
+                listaDetalles.add(detalle);
             }
-            texto.insert(0, "Cliente: " + cliente + "\n"); // agrega al principio
-            texto.append("\nTotal a pagar: ").append(totalPagar);
-            
         } catch (SQLException ex) {
             System.getLogger(ClienteDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-        
-        return texto.toString();
+        return listaDetalles;
     }
 
 }

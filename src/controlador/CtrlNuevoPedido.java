@@ -37,6 +37,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
     private DefaultTableModel modelBuscador = new DefaultTableModel();
     private DefaultTableModel modelDetalles = new DefaultTableModel();
     private Cliente clienteSeleccionado = new Cliente();
+    private BigDecimal total_a_pagar = BigDecimal.ZERO;
     private Login usuario;
     private CardLayout cardLayout;
 
@@ -280,7 +281,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         sopaSeleccionada = (Sopa) menu.cmbTamañoSopa.getSelectedItem();
         System.out.println(sopaSeleccionada.getPrecio());
         int cantidad = (int) menu.spnCantidad.getValue();
-        if(cantidad > 0 || menu.txtCliente.getText().isEmpty())
+        if(cantidad > 0 && !menu.txtCliente.getText().isEmpty())
         {
             detalle.setId_sopa(sopaSeleccionada.getId());
             detalle.setCantidad(cantidad);
@@ -293,24 +294,36 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
             fila[2] = subtotal;
             modelDetalles.addRow(fila);
             
-            BigDecimal total = BigDecimal.ZERO;
+            total_a_pagar = BigDecimal.ZERO;
             for(int i = 0; i < menu.tblDetalles.getRowCount(); i++){
                 BigDecimal sub = (BigDecimal) menu.tblDetalles.getValueAt(i, 2); // columna del subtotal
-                total = total.add(sub);
+                total_a_pagar = total_a_pagar.add(sub);
             }
-            menu.lblTotalAPagar.setText(total.toString() + " GS");
+            menu.lblTotalAPagar.setText(total_a_pagar.toString() + " GS");
         }
         else
         {
-            JOptionPane.showMessageDialog(null, "Cantidad no valida");
+            if(cantidad<=0)
+            {
+                JOptionPane.showMessageDialog(null, "Cantidad no valida");
+            }
+            else if(menu.txtCliente.getText().isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "Campo de Cliente vacio");
+            }
+            
+            
+            
         }
     }
     public void AgregarPedido(){
         Pedido pedido = new Pedido();
         pedido.setId_cliente(clienteSeleccionado.getId()); //Guardamos el id del cliente seleccionado en el objeto que ira al DAO
         pedido.setId_usuario(usuario.getId_usuario()); //Lo mismo con el usuario logueado
+        pedido.setTotal_pagar(total_a_pagar);
         int filasDetalles = menu.tblDetalles.getRowCount();
         if(menu.tblDetalles.getRowCount() > 0){
+            
             int id_pedido = pedDAO.AgregarPedido(pedido); // Se guarda el Pedido y el metodo retorna el id generado en el pedido agregado
             System.out.println("ID generado: " + id_pedido);
             if (id_pedido > 0){ //si no funciona retornara -1, para ello esta la condicion
@@ -324,6 +337,10 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
                     detalle.setId_pedido(id_pedido);
                     detalle.setId_sopa(sopaDetalle.getId());
                     detalle.setCantidad(cantidad);
+                    BigDecimal total = BigDecimal.ZERO;
+                    BigDecimal sub = (BigDecimal) menu.tblDetalles.getValueAt(i, 2); // columna del subtotal
+                    total = total.add(sub);
+                    detalle.setPrecio_venta(total);
 
                     pedDAO.AgregarDetalle(detalle);
             }
@@ -361,6 +378,7 @@ public class CtrlNuevoPedido implements ActionListener, KeyListener, DocumentLis
         CrearTablaDetalles(); //limpiamos la tabla (añadiendo una nuevo)
         clienteSeleccionado = new Cliente(); //ya no hay cliente seleccionado
         menu.lblTotalAPagar.setText("0 GS");
+        total_a_pagar = BigDecimal.ZERO;
         menu.txtCliente.requestFocusInWindow();
     }
 }

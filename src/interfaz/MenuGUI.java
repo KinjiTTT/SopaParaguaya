@@ -76,10 +76,10 @@ public class MenuGUI extends javax.swing.JFrame {
         PanelDividido = new javax.swing.JSplitPane();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblPedidos = new javax.swing.JTable();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        tblDetallesPedido = new javax.swing.JTable();
         jScrollPane7 = new javax.swing.JScrollPane();
         TextAreaInfoPedido = new javax.swing.JTextArea();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblDetallesPedido = new javax.swing.JTable();
         PanelMenu = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         ListaDeOpciones = new javax.swing.JList<>();
@@ -306,6 +306,8 @@ public class MenuGUI extends javax.swing.JFrame {
         lblTituloPedidos.setText("Pedidos");
         PedidosCRUD.add(lblTituloPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 80));
 
+        PanelDividido.setDividerLocation(184);
+        PanelDividido.setDividerSize(3);
         PanelDividido.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
         tblPedidos.setModel(new javax.swing.table.DefaultTableModel(
@@ -323,6 +325,15 @@ public class MenuGUI extends javax.swing.JFrame {
 
         PanelDividido.setTopComponent(jScrollPane5);
 
+        TextAreaInfoPedido.setColumns(20);
+        TextAreaInfoPedido.setFont(new java.awt.Font("Serif", 0, 12)); // NOI18N
+        TextAreaInfoPedido.setRows(5);
+        jScrollPane7.setViewportView(TextAreaInfoPedido);
+
+        PanelDividido.setRightComponent(jScrollPane7);
+
+        PedidosCRUD.add(PanelDividido, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 520, 310));
+
         tblDetallesPedido.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -336,15 +347,7 @@ public class MenuGUI extends javax.swing.JFrame {
         ));
         jScrollPane6.setViewportView(tblDetallesPedido);
 
-        PanelDividido.setRightComponent(jScrollPane6);
-
-        PedidosCRUD.add(PanelDividido, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 520, 340));
-
-        TextAreaInfoPedido.setColumns(20);
-        TextAreaInfoPedido.setRows(5);
-        jScrollPane7.setViewportView(TextAreaInfoPedido);
-
-        PedidosCRUD.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 110, 310));
+        PedidosCRUD.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 390, 520, 60));
 
         PanelImagenes.add(PedidosCRUD, "PedidosCRUD");
 

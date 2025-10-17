@@ -6,6 +6,7 @@ import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import javax.swing.JSplitPane;
 import javax.swing.table.DefaultTableModel;
@@ -97,7 +98,7 @@ public class CtrlPedidos extends KeyAdapter implements ActionListener {
         
     }
     public void LlenarTablaDetalles(int id_pedido){
-        ArrayList<Detalle_Pedido> detalles = pedDAO.CargarDetallesPedido(id_pedido);
+        ArrayList<Detalle_Pedido> detalles = pedDAO.CargarDetallesPedidoTabla(id_pedido);
         modelDetallePedido.setRowCount(0); // Limpia las filas
         for(Detalle_Pedido d: detalles)
         {
@@ -111,13 +112,34 @@ public class CtrlPedidos extends KeyAdapter implements ActionListener {
         
     }
     public void InformacionDePedido(int id_pedido){
-        ArrayList<Detalle_Pedido> detalles = pedDAO.CargarDetallesPedido(id_pedido);
+        ArrayList<Object[]> detalles = pedDAO.CargarDetallesPedidoTexto(id_pedido);
         menu.TextAreaInfoPedido.setText(""); // Limpia el Texto
-        StringBuilder cadena = new StringBuilder();
-        cadena.append(pedDAO.DetallesPedido(id_pedido));
-        menu.TextAreaInfoPedido.setText(cadena.toString());
-        System.out.println(cadena);
-        
-        
+        if (detalles.isEmpty()) return;
+
+            StringBuilder texto = new StringBuilder();
+
+            // El nombre del cliente está en la primera fila
+            String cliente = (String) detalles.get(0)[1];
+            texto.append("Pedido N°: ").append(id_pedido)
+                 .append("\nCliente: ").append(cliente)
+                 .append("\n-----------------------------\n");
+
+            // Recorremos los productos del pedido
+            for (Object[] d : detalles) {
+                String sopa = (String) d[2];
+                int cantidad = (int) d[3];
+                BigDecimal subtotal = (BigDecimal) d[4];
+
+                texto.append("Sopa ").append(sopa)
+                     .append(" x").append(cantidad)
+                     .append(" → ").append(subtotal)
+                     .append("\n");
+            }
+
+            texto.append("-----------------------------\n")
+                 .append("Total a pagar: ")
+                 .append(detalles.get(0)[5]); // mismo total en todas las filas
+
+            menu.TextAreaInfoPedido.setText(texto.toString());
     }
 }

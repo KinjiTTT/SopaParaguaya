@@ -1,12 +1,14 @@
 package modelo;
 
+import java.math.BigDecimal;
+
 
 public class Detalle_Pedido {
     private int id_detalle;
     private int id_pedido;
     private int id_sopa;
     private int cantidad;
-
+    private BigDecimal precio_venta;
     public int getId_detalle() {
         return id_detalle;
     }
@@ -37,6 +39,14 @@ public class Detalle_Pedido {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public BigDecimal getPrecio_venta() {
+        return precio_venta;
+    }
+
+    public void setPrecio_venta(BigDecimal precio_venta) {
+        this.precio_venta = precio_venta;
     }
     
     

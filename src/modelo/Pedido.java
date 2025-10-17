@@ -1,5 +1,6 @@
 package modelo;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Pedido {
@@ -11,6 +12,7 @@ public class Pedido {
     private String estado;
     private LocalDateTime fecha_entrega;
     private String fecha_entrega_formateada;
+    private BigDecimal total_pagar;
 
     public int getId_pedido() {
         return id_pedido;
@@ -74,6 +76,14 @@ public class Pedido {
 
     public void setFecha_entrega_formateada(String fecha_entrega_formateada) {
         this.fecha_entrega_formateada = fecha_entrega_formateada;
+    }
+
+    public BigDecimal getTotal_pagar() {
+        return total_pagar;
+    }
+
+    public void setTotal_pagar(BigDecimal total_pagar) {
+        this.total_pagar = total_pagar;
     }
     
     
