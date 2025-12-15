@@ -27,6 +27,7 @@ public class PedidosDAO {
             System.out.println("error");
         }
     }
+    //-------------------------------------Metodos para CtrlNuevoPedido-------------------------------------//
     public ArrayList<Sopa> CargarSopas(){
         ArrayList<Sopa> listasopas = new ArrayList<>();
         String sql = "SELECT id_sopa,tamaño,precio FROM sopas ORDER BY precio";
@@ -84,36 +85,49 @@ public class PedidosDAO {
         }
         return id;
     }
-    
-    public ArrayList<Pedido> CargarPedidos() {
-        ArrayList<Pedido> listaPedidos = new ArrayList<>();
-        String sql = "SELECT * FROM pedidos ORDER BY fecha_pedido DESC";
-
+    //-------------------------------------Metodos para CtrlPedidos-------------------------------------//
+    public ArrayList<Object[]> CargarPedidos(int caso) {
+        ArrayList<Object[]> listaPedidos = new ArrayList<>();
+        String elCaso = "";
+        if(caso == 0){
+            elCaso = "WHERE estado = 'cancelado'";
+        }
+        else if(caso == 1){
+            elCaso = "WHERE estado = 'entregado'";
+        }
+        else if(caso == 2){
+            elCaso = "WHERE estado = 'pendiente'";
+        }
+        String sql = "SELECT p.id_pedido,c.nombre ,u.usuario, p.fecha_pedido, p.estado, p.fecha_entrega FROM pedidos as p\n" +
+                "INNER JOIN clientes as c ON c.id_cliente = p.id_cliente\n" +
+                "INNER JOIN usuarios as u ON u.id_usuario = p.id_usuario\n" +
+                elCaso +
+                "ORDER BY p.fecha_pedido DESC";
         try {
             sentencia = conec.prepareStatement(sql);
             resultSet = sentencia.executeQuery();
 
             while (resultSet.next()) {
-                Pedido pedido = new Pedido();
+                Object[] pedido = new Object[6];
 
-                pedido.setId_pedido(resultSet.getInt("id_pedido")); // ← corregido, antes usabas id_cliente
-                pedido.setId_cliente(resultSet.getInt("id_cliente"));
-                pedido.setId_usuario(resultSet.getInt("id_usuario"));
-
-                // 🔹 convertir SQL Timestamp → LocalDateTime
+                pedido[0] = resultSet.getInt("id_pedido");
+                pedido[1] = resultSet.getString("nombre");
+                pedido[2] = resultSet.getString("usuario");
+               
+                // 🔹 conversion SQL Timestamp → LocalDateTime
                 java.sql.Timestamp tsPedido = resultSet.getTimestamp("fecha_pedido");
                 if (tsPedido != null) {
-                    pedido.setFecha_pedido(tsPedido.toLocalDateTime());
-                    pedido.setFecha_pedido_formateada(pedido.getFecha_pedido().format(formato));
+                    pedido[3] = tsPedido.toLocalDateTime().format(formato);
                 }
 
+                pedido[4] = resultSet.getString("estado");
+                
                 java.sql.Timestamp tsEntrega = resultSet.getTimestamp("fecha_entrega");
                 if (tsEntrega != null) {
-                    pedido.setFecha_entrega(tsEntrega.toLocalDateTime());
-                    pedido.setFecha_entrega_formateada(pedido.getFecha_entrega().format(formato));
+                    pedido[5] = tsEntrega.toLocalDateTime().format(formato);
                 }
 
-                pedido.setEstado(resultSet.getString("estado"));
+                
 
                 listaPedidos.add(pedido);
             }
@@ -180,5 +194,69 @@ public class PedidosDAO {
         }
         return listaDetalles;
     }
+    
+    public void MarcarComoEntregado(int id_pedido, int estadoPedido){
+        String estado;
+        if(estadoPedido == 0){
+            estado = "cancelado";
+        }
+        else{
+            estado = "entregado"; //cuando sea 1
+        }
+        
+        String sql = "UPDATE pedidos SET estado = '" + estado + "', fecha_entrega = CURRENT_TIMESTAMP WHERE id_pedido = ?";
+        
+        try {
+            sentencia = conec.prepareStatement(sql);
+            sentencia.setInt(1, id_pedido);
+            int update = sentencia.executeUpdate();
+            System.out.println("Se ha actualizado " + update + " elemento(s)");
+            
+        } catch (SQLException ex) {
+            System.getLogger(PedidosDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        
+    }
+    /*
+    public ArrayList<Pedido> buscarPedidos(String buscador, int caso) {
+    ArrayList<Pedido> lista = new ArrayList<>();
+    String elCaso;
+    if(caso == 0){
+        elCaso = "cancelado";
+    }
+    else if(caso == 1){
+        elCaso = "entregado";
+    }
+    else if(caso == 2){
+        elCaso = "pendiente";
+    }
+    else if(caso == 3){
+        //de momento vacio
+    }
+    String sql = "SELECT p.id_pedido,c.nombre ,u.usuario, p.fecha_pedido, p.estado, p.fecha_entrega FROM pedidos as p\n" +
+                "INNER JOIN clientes as c ON c.id_cliente = p.id_cliente\n" +
+                "INNER JOIN usuarios as u ON u.id_usuario = p.id_usuario\n" +
+                "WHERE estado = '?'";
+    try {
+        sentencia = conec.prepareStatement(sql);
+        // el comodín % va en el parámetro, no en la query
+        String filtroLike = "%" + buscador + "%";
+        sentencia.setString(1, filtroLike);
 
+        resultSet = sentencia.executeQuery();
+        while (resultSet.next()) {
+            Pedido pedido = new Pedido();
+            pedido.setId_pedido(resultSet.getInt("id_cliente"));
+            pedido.setNombre(resultSet.getString("nombre"));
+            pedido.setTelefono(resultSet.getString("telefono"));
+            lista.add(pedido);
+        }
+    } catch (SQLException ex) {
+        System.getLogger(ClienteDAO.class.getName())
+              .log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+
+    return lista;
+    }
+    */
 }

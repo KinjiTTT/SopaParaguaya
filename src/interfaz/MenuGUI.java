@@ -78,8 +78,17 @@ public class MenuGUI extends javax.swing.JFrame {
         tblPedidos = new javax.swing.JTable();
         jScrollPane7 = new javax.swing.JScrollPane();
         TextAreaInfoPedido = new javax.swing.JTextArea();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        tblDetallesPedido = new javax.swing.JTable();
+        btnModificarPedido = new javax.swing.JButton();
+        btnEntregado = new javax.swing.JButton();
+        btnCancelado = new javax.swing.JButton();
+        BuscadorPedidos = new javax.swing.JTextField();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnVerTodos = new javax.swing.JButton();
+        btnVerPendientes = new javax.swing.JButton();
+        btnVerEntregados = new javax.swing.JButton();
+        btnVerCancelados = new javax.swing.JButton();
+        PagosCRUD = new javax.swing.JPanel();
+        lblTituloPagos = new javax.swing.JLabel();
         PanelMenu = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         ListaDeOpciones = new javax.swing.JList<>();
@@ -170,7 +179,7 @@ public class MenuGUI extends javax.swing.JFrame {
 
         lblTotalAPagar.setFont(new java.awt.Font("Wide Latin", 0, 18)); // NOI18N
         lblTotalAPagar.setText("0 GS");
-        NuevoPedidoCRUD.add(lblTotalAPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, 200, 20));
+        NuevoPedidoCRUD.add(lblTotalAPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, 260, 20));
 
         jScrollPane3.setBorder(new javax.swing.border.MatteBorder(null));
 
@@ -332,24 +341,64 @@ public class MenuGUI extends javax.swing.JFrame {
 
         PanelDividido.setRightComponent(jScrollPane7);
 
-        PedidosCRUD.add(PanelDividido, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 520, 310));
+        PedidosCRUD.add(PanelDividido, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 520, 310));
 
-        tblDetallesPedido.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
+        btnModificarPedido.setText("Modificar");
+        btnModificarPedido.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        PedidosCRUD.add(btnModificarPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 100, 60));
 
-            }
-        ));
-        jScrollPane6.setViewportView(tblDetallesPedido);
+        btnEntregado.setBackground(new java.awt.Color(51, 255, 0));
+        btnEntregado.setForeground(new java.awt.Color(255, 255, 255));
+        btnEntregado.setText("Entregado");
+        btnEntregado.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        PedidosCRUD.add(btnEntregado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 100, 60));
 
-        PedidosCRUD.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 390, 520, 60));
+        btnCancelado.setBackground(new java.awt.Color(204, 0, 0));
+        btnCancelado.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelado.setText("Cancelado");
+        btnCancelado.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 0, 0), new java.awt.Color(102, 0, 0), new java.awt.Color(102, 0, 0), new java.awt.Color(102, 0, 0)));
+        PedidosCRUD.add(btnCancelado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 100, 60));
+        PedidosCRUD.add(BuscadorPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 450, -1));
+
+        jToolBar1.setRollover(true);
+
+        btnVerTodos.setText("Todos");
+        btnVerTodos.setFocusable(false);
+        btnVerTodos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnVerTodos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnVerTodos);
+
+        btnVerPendientes.setText("Pendientes");
+        btnVerPendientes.setFocusable(false);
+        btnVerPendientes.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnVerPendientes.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnVerPendientes);
+
+        btnVerEntregados.setText("Entregados");
+        btnVerEntregados.setToolTipText("");
+        btnVerEntregados.setFocusable(false);
+        btnVerEntregados.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnVerEntregados.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnVerEntregados);
+
+        btnVerCancelados.setText("Cancelados");
+        btnVerCancelados.setFocusable(false);
+        btnVerCancelados.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnVerCancelados.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnVerCancelados);
+
+        PedidosCRUD.add(jToolBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 290, 20));
 
         PanelImagenes.add(PedidosCRUD, "PedidosCRUD");
+
+        PagosCRUD.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblTituloPagos.setFont(new java.awt.Font("Txt_IV50", 1, 24)); // NOI18N
+        lblTituloPagos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTituloPagos.setText("Pagos");
+        PagosCRUD.add(lblTituloPagos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 80));
+
+        PanelImagenes.add(PagosCRUD, "card11");
 
         getContentPane().add(PanelImagenes, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, 700, 450));
 
@@ -402,9 +451,11 @@ public class MenuGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JTextField BuscadorPedidos;
     private javax.swing.JPanel ClientesCRUD;
     public javax.swing.JList<String> ListaDeOpciones;
     private javax.swing.JPanel NuevoPedidoCRUD;
+    private javax.swing.JPanel PagosCRUD;
     public javax.swing.JSplitPane PanelDividido;
     private javax.swing.JPanel PanelImagenes;
     private javax.swing.JPanel PanelMenu;
@@ -412,10 +463,17 @@ public class MenuGUI extends javax.swing.JFrame {
     public javax.swing.JTextArea TextAreaInfoPedido;
     public javax.swing.JButton btnAgregarCliente;
     public javax.swing.JButton btnAgregarDetalle;
+    public javax.swing.JButton btnCancelado;
     public javax.swing.JButton btnCancelarPedido;
     public javax.swing.JButton btnConfirmarPedido;
     public javax.swing.JButton btnEliminarCliente;
+    public javax.swing.JButton btnEntregado;
     public javax.swing.JButton btnModificarCliente;
+    public javax.swing.JButton btnModificarPedido;
+    public javax.swing.JButton btnVerCancelados;
+    public javax.swing.JButton btnVerEntregados;
+    public javax.swing.JButton btnVerPendientes;
+    public javax.swing.JButton btnVerTodos;
     public javax.swing.JComboBox<Sopa> cmbTamañoSopa;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -428,8 +486,8 @@ public class MenuGUI extends javax.swing.JFrame {
     public javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblGanancias;
     private javax.swing.JLabel lblHistorial;
     private javax.swing.JLabel lblNombreCliente;
@@ -438,6 +496,7 @@ public class MenuGUI extends javax.swing.JFrame {
     private javax.swing.JLabel lblPedidos;
     private javax.swing.JLabel lblTelefonoCliente;
     private javax.swing.JLabel lblTituloNuevoPedido;
+    private javax.swing.JLabel lblTituloPagos;
     private javax.swing.JLabel lblTituloPedidos;
     public javax.swing.JLabel lblTotalAPagar;
     private javax.swing.JPanel pnlClientes;
@@ -450,7 +509,6 @@ public class MenuGUI extends javax.swing.JFrame {
     public javax.swing.JTable tblCliente;
     public javax.swing.JTable tblClientes;
     public javax.swing.JTable tblDetalles;
-    public javax.swing.JTable tblDetallesPedido;
     public javax.swing.JTable tblPedidos;
     public javax.swing.JTextField txtCliente;
     public javax.swing.JTextField txtNombreCliente;
